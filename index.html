@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=none">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="TAL studios">
+    <meta name="description" content="Aqui Puedes descargar animes de forma gatuita">
+    <link rel="icon" href="ico.png" type="image/png">
+    <title>T-AnimeL</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('fondo.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: url('ico.png'), auto;
+            flex-direction: column;
+            user-select: none;
+            overflow: hidden;
+            font-family: 'MinecraftFont', sans-serif;
+        }
+
+        #profiles {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-left: 80px;
+        }
+
+        #profiles>.profile {
+            aspect-ratio: 7 / 8;
+            backdrop-filter: blur(0.75vw);
+            background-color: rgba(255, 255, 255, 0.06);
+            border-radius: 1vw;
+            cursor: pointer;
+            transition: background-color 250ms;
+            width: 200px;
+	    height: 250px;
+        }
+
+        #profiles>.profile:hover {
+            backdrop-filter: blur(1vw);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .profile>.profile-content {
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            height: calc(100% - clamp(8px, 1vw, 12px));
+            justify-content: center;
+            padding: clamp(8px, 1vw, 12px);
+        }
+
+        .profile>.profile-content>.profile-pic {
+            aspect-ratio: 1;
+            border: clamp(3px, 0.4vw, 5px) solid white;
+            border-radius: 100%;
+            flex-shrink: 0;
+            height: 70%;
+            position: relative;
+        }
+
+        .profile>.profile-content>.profile-pic>.profile-pic-image {
+            background-color: rgba(255, 255, 255, 0.06);
+            border-radius: 100%;
+            height: calc(100% - clamp(10px, 1.5vw, 20px));
+            margin: clamp(5px, 0.75vw, 10px);
+            object-fit: cover;
+            width: calc(100% - clamp(10px, 1.5vw, 20px));
+        }
+
+        .profile>.profile-content>.profile-name {
+            color: white;
+            font-family: 'Rubik', sans-serif;
+            font-size: clamp(1em, 2vw, 2em);
+            margin: 0px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="profiles">
+            <div class="profile">
+                <div class="profile-content">
+                    <div class="profile-pic">
+                        <img class="profile-pic-image" src="Portadas/0001.png"
+                        />
+                    </div>
+                    <h3 class="profile-name">Kinsou No Vermil</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    </script>
+</body>
+
+</html>
