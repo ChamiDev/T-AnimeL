@@ -19,6 +19,8 @@ window.addEventListener('load', function () {
     const closeModal = document.querySelector('.close');
     const downloadButton = document.getElementById('download-button');
 
+    let currentDownloadLink = ''; // Variable para almacenar el enlace de descarga actual
+
     // Función para abrir el modal con la información del perfil
     profileElements.forEach(profile => {
         profile.addEventListener('click', function () {
@@ -26,7 +28,7 @@ window.addEventListener('load', function () {
             const profileImage = profile.querySelector('.profile-pic-image').src;
             const profileDescription = profile.getAttribute('data-description');
             const profileTags = profile.getAttribute('data-categories');
-            const downloadLink = profile.getAttribute('data-download'); // Obtener el enlace de descarga
+            currentDownloadLink = profile.getAttribute('data-download'); // Obtener el enlace de descarga
 
             // Asignar los valores en el modal
             modalTitle.innerText = profileName;
@@ -42,14 +44,21 @@ window.addEventListener('load', function () {
                 modalTags.appendChild(span);
             });
 
-            // Asignar el enlace de descarga al botón
-            downloadButton.setAttribute('href', downloadLink);
-            downloadButton.setAttribute('download', ''); // Esto fuerza la descarga del archivo
-
             // Mostrar el modal
             modal.style.display = 'block';
         });
     });
+
+    // Función para manejar la descarga
+    downloadButton.onclick = function () {
+        // Crear un elemento de anclaje temporal para iniciar la descarga
+        const a = document.createElement('a');
+        a.href = currentDownloadLink;
+        a.download = ''; // Esto fuerza la descarga
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a); // Eliminar el elemento después de la descarga
+    };
 
     // Cerrar el modal al hacer clic en el botón de cerrar
     closeModal.addEventListener('click', function () {
