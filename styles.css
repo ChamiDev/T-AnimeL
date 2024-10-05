@@ -63,12 +63,12 @@ body {
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 100;
+    z-index: 100; /* Para que esté por encima de otros elementos */
 }
 
 #search-input {
     padding: 10px;
-    width: 300px;
+    width: 300px; /* Ancho fijo para el input */
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -77,22 +77,27 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 100px;
+    margin-top: 100px; /* Espacio para el buscador */
 }
 
-/* Ajustes para las tarjetas de perfil */
+.profile {
+    width: 200px;
+    margin: 15px;
+    cursor: pointer;
+    text-align: center;
+}
+
 .profile-content {
     background-color: rgba(0, 0, 0, 0.6); /* Fondo negro semi-opaco */
-    backdrop-filter: blur(10px); /* Aplicar desenfoque */
+    backdrop-filter: blur(10px); /* Efecto de desenfoque */
     border-radius: 10px;
     padding: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); /* Sombra más suave */
-    transition: transform 0.2s, background-color 0.2s;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s;
 }
 
 .profile-content:hover {
     transform: scale(1.05);
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo más oscuro al pasar el ratón */
 }
 
 .profile-pic {
@@ -110,58 +115,48 @@ body {
 }
 
 .profile-name {
-    color: white; /* Cambiado a blanco para que contraste con el fondo negro */
+    color: white; /* Cambiar el color a blanco para mayor contraste */
     font-size: clamp(15px, 2vw, 24px);
     margin: 0;
     text-align: center;
     width: 100%;
 }
 
-/* Ajustes para el modal */
+/* Estilos para el modal */
+.modal {
+    display: none; /* Ocultar modal por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Habilitar desplazamiento si es necesario */
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
+}
+
 .modal-content {
     background-color: rgba(0, 0, 0, 0.8); /* Fondo negro semi-opaco */
-    backdrop-filter: blur(15px); /* Aplicar desenfoque */
-    color: white; /* Cambiar el color del texto a blanco */
-    border-radius: 10px;
+    backdrop-filter: blur(10px); /* Efecto de desenfoque */
+    margin: 15% auto; /* Margen superior e inferior */
     padding: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    border: 1px solid #888;
     width: 80%; /* Ancho del modal */
-    max-width: 600px; /* Ancho máximo */
-    margin: 0 auto;
-}
-
-.modal {
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente para la superposición */
-}
-
-/* Estilos para los botones en el modal */
-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    margin: 5px;
-    font-size: 1em;
-}
-
-button:hover {
-    background-color: #218838;
+    border-radius: 10px; /* Bordes redondeados */
 }
 
 .close {
-    background-color: #dc3545; /* Color rojo para el botón de cerrar */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    margin-left: 10px;
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-.close:hover {
-    background-color: #c82333;
+.close:hover,
+.close:focus {
+    color: white; /* Cambiar el color a blanco */
+    text-decoration: none;
+    cursor: pointer;
 }
 
 /* Estilos para las mini etiquetas */
@@ -178,7 +173,29 @@ button:hover {
     margin-right: 5px;
 }
 
-/* Estilos para las barras de desplazamiento personalizadas */
+/* Estilos para los botones */
+button {
+    background-color: #28a745; /* Color de fondo verde */
+    color: white; /* Color de texto blanco */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px 15px; /* Espaciado interno */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
+    margin: 5px; /* Margen entre botones */
+    font-size: 1em; /* Tamaño de fuente */
+}
+
+button:hover {
+    background-color: #218838; /* Color más oscuro al pasar el ratón */
+}
+
+/* Firefox (uncomment to work in Firefox, although other properties will not work!)  */
+/** {
+    scrollbar-width: thin;
+    scrollbar-color: #397524 #000000;
+} */
+
+/* Chrome, Edge and Safari */
 *::-webkit-scrollbar {
     height: 5px;
     width: 5px;
@@ -186,6 +203,14 @@ button:hover {
 
 *::-webkit-scrollbar-track {
     border-radius: 20px;
+    background-color: #000000;
+}
+
+*::-webkit-scrollbar-track:hover {
+    background-color: #000000;
+}
+
+*::-webkit-scrollbar-track:active {
     background-color: #000000;
 }
 
