@@ -1,9 +1,30 @@
-// Esperar a que la página se cargue completamente
 window.addEventListener('load', function () {
     const loader = document.querySelector('.loader');
     const profiles = document.getElementById('profiles');
     const searchInput = document.getElementById('search-input'); // Seleccionar el input de búsqueda
     const profileElements = document.querySelectorAll('.profile');
+
+    // Ocultar el loader
+    loader.style.display = 'none';
+    profiles.style.display = 'flex';
+
+    // Función para filtrar los perfiles según la búsqueda
+    searchInput.addEventListener('input', function () {
+        const searchTerm = searchInput.value.toLowerCase(); // Convertir el texto ingresado a minúsculas
+        profileElements.forEach(profile => {
+            const profileName = profile.querySelector('.profile-name').innerText.toLowerCase();
+            const profileCategories = profile.getAttribute('data-categories').toLowerCase();
+
+            // Mostrar u ocultar el perfil según el término de búsqueda
+            if (profileName.includes(searchTerm) || profileCategories.includes(searchTerm)) {
+                profile.style.display = 'block';
+            } else {
+                profile.style.display = 'none';
+            }
+        });
+    });
+
+    // Obtener todos los perfiles
     const modal = document.getElementById('modal');
     const modalTitle = document.getElementById('modal-title');
     const modalImage = document.getElementById('modal-image');
@@ -13,10 +34,6 @@ window.addEventListener('load', function () {
     const downloadButton = document.getElementById('download-button');
 
     let currentDownloadLink = ''; // Variable para almacenar el enlace de descarga actual
-
-    // Ocultar el loader
-    loader.style.display = 'none';
-    profiles.style.display = 'flex';
 
     // Función para abrir el modal con la información del perfil
     profileElements.forEach(profile => {
@@ -67,21 +84,5 @@ window.addEventListener('load', function () {
         if (event.target === modal) {
             modal.style.display = 'none';
         }
-    });
-
-    // Función para filtrar los perfiles según la búsqueda
-    searchInput.addEventListener('input', function () {
-        const searchTerm = searchInput.value.toLowerCase(); // Convertir el texto ingresado a minúsculas
-        profileElements.forEach(profile => {
-            const profileName = profile.querySelector('.profile-name').innerText.toLowerCase();
-            const profileCategories = profile.getAttribute('data-categories').toLowerCase();
-
-            // Mostrar u ocultar el perfil según el término de búsqueda
-            if (profileName.includes(searchTerm) || profileCategories.includes(searchTerm)) {
-                profile.style.display = 'block';
-            } else {
-                profile.style.display = 'none';
-            }
-        });
     });
 });
