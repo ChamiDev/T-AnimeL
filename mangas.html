@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=none">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="TAL studios">
+    <meta name="description" content="Aquí Puedes descargar animes de forma gratuita">
+    <link rel="icon" href="ico.png" type="image/png">
+    <title>T-AnimeL</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .cambio {
+            backdrop-filter: blur(10px);
+            background-color: rgba(30, 100, 30, 0.9);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+            z-index: 5;
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Buscador -->
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Buscar...">
+    </div>
+
+    <!-- Loader -->
+    <div class="loader">
+        <div class="carga"></div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div id="app">
+        <div id="profiles">
+            <!-- Perfil de Roshidere -->
+            <div class="profile" data-categories="#Romantica #Comedia #Fantasia" data-description="Sinopsis
+Roshidere sigue la vida de un joven que descubre los secretos y caprichos de una chica tsundere con una fuerte fachada pero con un corazón suave. Juntos enfrentarán diversas situaciones románticas y cómicas que pondrán a prueba su relación." data-download="https://drive.google.com/uc?id=1ens213En8-ireqzCXwiz18fah5yLCko0&export=download">
+                <div class="profile-content">
+                    <div class="profile-pic">
+                        <img class="profile-pic-image" src="Portadas/M0001.png" />
+                    </div>
+                    <h3 class="profile-name">Roshidere</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Div emergente para mostrar detalles del perfil -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <img id="modal-image" src="" alt="" style="width:100%; height:auto;" />
+            <p id="modal-description"></p>
+            <div id="modal-tags"></div>
+            <!-- Para las mini etiquetas -->
+            <div>
+                <button id="download-button">Descargar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón de cambio -->
+    <div>
+        <button class="cambio" onclick="window.location.href='https://chamidev.github.io/T-AnimeL/'">
+            <script src="https://cdn.lordicon.com/lordicon.js"></script>
+<lord-icon
+    src="https://cdn.lordicon.com/xmaezqzk.json"
+    trigger="morph"
+    state="morph-open"
+    colors="primary:#000000,secondary:#000000"
+    style="width:70px;height:70px">
+</lord-icon>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+    <!-- Enlace al archivo JavaScript -->
+</body>
+
+</html>
