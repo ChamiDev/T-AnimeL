@@ -228,3 +228,17 @@ button:hover {
 *::-webkit-scrollbar-thumb:active {
     background-color: #62A34B;
 }
+
+        .cambio {
+            backdrop-filter: blur(10px);
+            background-color: rgba(30, 100, 30, 0.9);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+            z-index: 5;
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            
+        }
