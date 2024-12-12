@@ -3,107 +3,285 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=none">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="TAL studios">
-    <meta name="description" content="Aquí Puedes descargar animes de forma gratuita">
-    <link rel="icon" href="ico.png" type="image/png">
+    <meta name="description" content="Aquí Puedes ver animes de forma gratuita">
+    <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
     <title>T-AnimeL</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Enlace al archivo CSS -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('https://um2411.renderforest.com/u25148551/visuals/57c04973-9090-494d-b7fa-04d7986d4a92.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: flex;
+            flex-direction: column;
+            user-select: none;
+            font-family: 'MinecraftFont', sans-serif;
+            overflow: hidden;
+        }
+
+        #profiles {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 50px;
+            max-height: calc(100vh - 50px);
+            overflow-y: auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .profile {
+            position: relative;
+            width: 256px;
+            height: 144px;
+            margin: 15px;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .profile:hover {
+            transform: scale(1.1);
+        }
+
+        .profile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s;
+        }
+
+        .profile-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .profile:hover .profile-info {
+            opacity: 1;
+        }
+
+        .profile-name {
+            font-size: clamp(15px, 2vw, 24px);
+            margin: 0 10px;
+            text-align: center;
+        }
+
+        .profile-description {
+            font-size: 14px;
+            margin: 10px 20px;
+            text-align: center;
+        }
+
+        .profile button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        .profile button:hover {
+            background-color: #218838;
+        }
+
+        *::-webkit-scrollbar {
+            height: 5px;
+            width: 5px;
+        }
+
+        *::-webkit-scrollbar-track {
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        *::-webkit-scrollbar-track:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        *::-webkit-scrollbar-track:active {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        *::-webkit-scrollbar-thumb {
+            border-radius: 5px;
+            background-color: #107500;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background-color: #62A34B;
+        }
+
+        *::-webkit-scrollbar-thumb:active {
+            background-color: #00FF00;
+        }
+
+        .nav {
+            width: 94%;
+            height: 45px;
+            background-color: green;
+            position: absolute;
+            top: 3px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+        }
+
+        .navimg {
+            height: 30px;
+            background-color: white;
+            box-shadow: 0px 0px 5px 5px white;
+            border-radius: 50%;
+        }
+
+        .cuenta {
+            position: relative;
+        }
+
+        .cuenta .menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 35px;
+            background-color: #333;
+            border-radius: 5px;
+            width: 150px;
+            z-index: 1;
+        }
+
+        .cuenta:hover .menu {
+            display: block;
+        }
+
+        .cuenta .menu a {
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            border-bottom: 1px solid #444;
+        }
+
+        .cuenta .menu a:hover {
+            background-color: #555;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .search-container input {
+            width: 90%;
+            padding: 5px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Buscador -->
-    <div id="search-container">
-        <input type="text" id="search-input" placeholder="Buscar...">
-    </div>
-
-    <!-- Loader -->
-    <div class="loader">
-        <div class="carga"></div>
-    </div>
-
-    <!-- Contenido principal -->
-    <div id="app">
-        <div id="profiles">
-            <div class="profile" data-categories="#Fantasia #Comedia #Romantica #Echi" data-description="Sinopsis
-Conoce a Alto, un desafortunado estudiante de la Royal Ortigia Magic Academy cuyo rendimiento académico deja mucho que desear. En lugar de adoptar un enfoque más sensato para salvar sus calificaciones a tiempo para la graduación, Alto decide convocar un poco de ayuda de otro mundo. ¡Solo después se entera de que ha obligado a la legendaria diablesa Vermeil a servir como su familiar! Pero si bien Vermeil es un poderoso aliado que seguramente cambiará sus calificaciones, su magia solo puede reponerse con un beso, y eso hace que todo se vaya al infierno con la celosa amiga de la infancia de Alto, Lilia."
-                data-download="https://drive.google.com/uc?id=1czEZtY_za52ll7CAW8-Ng3Pk71CQS5np&export=download">
-                <div class="profile-content">
-                    <div class="profile-pic">
-                        <img class="profile-pic-image" src="Portadas/0001.png" />
-                    </div>
-                    <h3 class="profile-name">Kinsou No Vermil</h3>
-                </div>
-            </div>
-
-            <div class="profile" data-categories="#Yuri #Echi #Humor Negro #Mahou shoujo #Parodia" data-description="Sinopsis 
-Utena Hiiragi es una chica normal e introvertida que siente una gran admiración por las chicas mágicas, especialmente por el hermoso trío que protege su pueblo, Tres Magia. Un día, una mascota llamada Venalita se acerca a Utena y le otorga poderes mágicos, pero en lugar de convertirse en la chica mágica de la justicia que siempre quiso ser, se convierte en una general malvada de la organización Enormita. A pesar de la desgracia de verse obligada a luchar contra las chicas mágicas que admira, Utena pronto descubre que tiene un lado sádico oculto y se deleita torturando a sus antiguas idols con su nueva obsesión."
-                data-download="https://drive.google.com/uc?id=1oGkDl7wpnDY60MiGPbbpZS8EK_BlVri2&export=download">
-                <div class="profile-content">
-                    <div class="profile-pic">
-                        <img class="profile-pic-image" src="Portadas/0002.png" />
-                    </div>
-                    <h3 class="profile-name">Mahō Shōjo ni Akogarete</h3>
-                </div>
-            </div>
-
-            <!-- Dragon Ball Super: Broly -->
-            <div class="profile" data-categories="#Accion #Aventura #Fantasia #Shonen" data-description="Sinopsis
-La Tierra vive en paz tras los acontecimientos del Torneo de la Fuerza. Goku, sabiendo que existen guerreros mucho más poderosos en el universo aún por descubrir, continúa entrenando para alcanzar niveles de poder más altos. Un día, Broly, un guerrero desconocido y extremadamente fuerte, aparece. Goku y Vegeta deben enfrentarse a esta nueva amenaza, que tiene una conexión con el pasado de los Saiyans."
-                data-download="https://drive.google.com/uc?id=1TtwYJ204f_DDq6JvQa8XJjaQSfoaRvaf&export=download">
-                <div class="profile-content">
-                    <div class="profile-pic">
-                        <img class="profile-pic-image" src="Portadas/0003.png" />
-                    </div>
-                    <h3 class="profile-name">DBS: Broly</h3>
-                </div>
-            </div>
-
-            <!-- Dragon Ball Super: Super Hero -->
-            <div class="profile" data-categories="#Accion #Aventura #CienciaFiccion #Shonen" data-description="Sinopsis
-El Ejército de la Cinta Roja, una organización que Goku destruyó en el pasado, ha regresado. Ahora, han creado nuevos androides, Gamma 1 y Gamma 2, para atacar a Goku y sus amigos. Sin embargo, esta nueva amenaza es solo el comienzo de algo mucho más grande. Esta vez, Gohan y Piccolo deben intervenir y proteger la Tierra de esta poderosa amenaza."
-                data-download="https://drive.google.com/uc?id=1d1nkbpUMV3-K2O18q9iAnNHPNilv4KxK&export=download">
-                <div class="profile-content">
-                    <div class="profile-pic">
-                        <img class="profile-pic-image" src="Portadas/0004.png" />
-                    </div>
-                    <h3 class="profile-name">DBS: Super Hero</h3>
-                </div>
-            </div>
-
-            <!-- Añadir más perfiles según sea necesario -->
-        </div>
-    </div>
-
-    <!-- Div emergente para mostrar detalles del perfil -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="modal-title"></h2>
-            <img id="modal-image" src="" alt="" style="width:100%; height:auto;" />
-            <p id="modal-description"></p>
-            <div id="modal-tags"></div>
-            <!-- Para las mini etiquetas -->
-            <div>
-                <button id="download-button">Descargar</button>
-                <!-- Cambiado a botón -->
-            </div>
-        </div>
-    </div>
-        <button class="cambio" onclick="window.location.href='https://chamidev.github.io/T-AnimeL/mangas/'">
-<script src="https://cdn.lordicon.com/lordicon.js"></script>
-<lord-icon
-    src="https://cdn.lordicon.com/xmaezqzk.json"
-    trigger="morph"
-    state="morph-open"
-    colors="primary:#000000,secondary:#000000"
-    style="width:70px;height:70px">
-</lord-icon>
-        </button>
-    <script src="script.js"></script>
-    <!-- Enlace al archivo JavaScript -->
-</body>
     
+    
+    <div class="nav">
+        <a href="https://chamidev.github.io/T-AnimeL/"><img class="navimg" src="https://chamidev.github.io/T-AnimeL/ico.png" alt="Logo"></a>
+        <div class="search-container">
+            <input type="text" placeholder="Buscar..." id="search-bar">
+        </div>
+        <div class="cuenta">
+            <a href="#">
+                <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                <lord-icon src="https://cdn.lordicon.com/hroklero.json" trigger="in" delay="1000" state="in-reveal" colors="primary:#000000,secondary:#000000" style="width:50px;height:50px"></lord-icon>
+            </a>
+            <div class="menu">
+                <a href="#">Biblioteca</a>
+                <a href="#">Historial</a>
+                <a href="#">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="profiles"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
+    authDomain: "tanime-l.firebaseapp.com",
+    projectId: "tanime-l",
+    storageBucket: "tanime-l.firebasestorage.app",
+    messagingSenderId: "636577160002",
+    appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  const profilesContainer = document.getElementById("profiles");
+
+  async function loadAnimes() {
+    const animeRef = ref(database, 'Anime');
+    const snapshot = await get(animeRef);
+
+    if (snapshot.exists()) {
+      const animes = snapshot.val();
+      profilesContainer.innerHTML = ""; // Limpia el contenedor antes de cargar
+
+      Object.keys(animes).forEach(key => {
+        const anime = animes[key];
+        const profile = document.createElement("div");
+        profile.classList.add("profile");
+
+        profile.innerHTML = `
+          <img src="${anime.portada}" alt="${anime.titulo}">
+          <div class="profile-info">
+            <h3 class="profile-name">${anime.titulo}</h3>
+            <p class="profile-description">${anime.descripcion}</p>
+            <button onclick="window.location.href='ver.html?id=${key}'">Ver</button>
+          </div>
+        `;
+
+        profilesContainer.appendChild(profile);
+      });
+    } else {
+      console.log("No hay datos disponibles");
+    }
+  }
+
+  // Llamar a la función para cargar animes al inicio
+  loadAnimes();
+</script>
+</body>
+
 </html>
