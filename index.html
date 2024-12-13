@@ -13,7 +13,7 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            background-image: url('fondo.gif');
+            background-image: url('https://chamidev.github.io/T-AnimeL/fondo.gif');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -205,12 +205,32 @@
             border-radius: 10px;
             border: 1px solid #ccc;
         }
+
+        #visit-counter {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            background: rgba(0, 50, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            z-index: 1000;
+        }
+
+        #visit-counter img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
     </style>
 </head>
 
 <body>
-    
-    
+
     <div class="nav">
         <a href="https://chamidev.github.io/T-AnimeL/"><img class="navimg" src="https://chamidev.github.io/T-AnimeL/ico.png" alt="Logo"></a>
         <div class="search-container">
@@ -229,25 +249,55 @@
         </div>
     </div>
 
-    
+
     <div id="profiles"></div>
-
+    <div id="visit-counter">
+        <img src="https://um2412.renderforest.com/u25148551/visuals/a6d728bc-ecba-448e-90aa-8653b5b93ebf.png" alt="Ojo">
+        <span id="visit-count">Cargando total de visitantes</span>
+    </div>
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+  import { getDatabase, ref, runTransaction, onValue, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
+  // Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
     authDomain: "tanime-l.firebaseapp.com",
+    databaseURL: "https://tanime-l-default-rtdb.firebaseio.com",
     projectId: "tanime-l",
     storageBucket: "tanime-l.firebasestorage.app",
     messagingSenderId: "636577160002",
     appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
   };
 
+  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
 
+  // Function to increment page visits using a transaction
+  const countPageVisit = async () => {
+    const visitRef = ref(database, 'visits');
+
+    try {
+      await runTransaction(visitRef, (currentValue) => {
+        return (currentValue || 0) + 1;
+      });
+    } catch (error) {
+      console.error("Error updating visit count:", error);
+    }
+  };
+
+  // Function to display the visit count
+  const displayVisitCount = () => {
+    const visitRef = ref(database, 'visits');
+    onValue(visitRef, (snapshot) => {
+      const count = snapshot.val();
+      document.getElementById('visit-count').textContent = `${count}`;
+    });
+  };
+
+  // Function to load and display anime profiles
   const profilesContainer = document.getElementById("profiles");
 
   async function loadAnimes() {
@@ -256,7 +306,7 @@
 
     if (snapshot.exists()) {
       const animes = snapshot.val();
-      profilesContainer.innerHTML = ""; // Limpia el contenedor antes de cargar
+      profilesContainer.innerHTML = ""; // Clear the container before loading
 
       Object.keys(animes).forEach(key => {
         const anime = animes[key];
@@ -279,9 +329,12 @@
     }
   }
 
-  // Llamar a la función para cargar animes al inicio
+  // Call the functions
+  countPageVisit();
+  displayVisitCount();
   loadAnimes();
 </script>
+
 </body>
 
 </html>
