@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="TAL studios">
+    <meta name="description" content="Aquí Puedes ver animes de forma gratuita">
+    <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
+    <title>T-AnimeL</title>
+    <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #000;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    #progress-container {
+      position: absolute;
+      bottom: 20px;
+      width: 90%;
+      max-width: 600px;
+      background-color: rgba(255, 0, 0, 0.1);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    #progress-bar {
+      height: 5px;
+      background-color: rgba(0, 255, 0, 0.5);
+      width: 0;
+      transition: width 0.2s ease;
+    }
+
+    #percentage {
+      position: absolute;
+      bottom: 50px;
+      text-align: center;
+      width: 100%;
+      font-size: 1.2rem;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="percentage"></div>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <video id="video" muted preload="auto">
+    <source src="https://um2412.renderforest.com/u25148551/visuals/cd40896d-e837-4fc1-8435-188db1c7b048.mp4" type="video/mp4">
+    Tu dispositivo no es compatible...
+  </video>
+
+  <script>
+    const video = document.getElementById('video');
+    const progressBar = document.getElementById('progress-bar');
+    const percentageText = document.getElementById('percentage');
+
+    function updateProgress() {
+      if (video.buffered.length > 0) {
+        const bufferedEnd = video.buffered.end(0);
+        const duration = video.duration || 1; // Evita dividir por 0
+        const percentage = Math.min((bufferedEnd / duration) * 100, 100);
+        progressBar.style.width = percentage + '%';
+        percentageText.innerText = '' + Math.floor(percentage) + '/100';
+      }
+    }
+
+    // Actualiza el progreso periódicamente
+    const interval = setInterval(() => {
+      if (video.readyState > 0) {
+        updateProgress();
+
+        const bufferedEnd = video.buffered.end(0);
+        if (bufferedEnd >= video.duration) {
+          clearInterval(interval); // Detiene el intervalo cuando está completamente cargado
+          progressBar.style.width = '100%';
+          percentageText.innerText = '';
+          setTimeout(() => {
+            percentageText.style.display = 'none';
+            video.style.display = 'block';
+            video.play();
+          }, 500);
+        }
+      }
+    }, 200);
+
+    // Redirige a la página cuando el video termina
+    video.addEventListener('ended', () => {
+      window.location.href = 'go:home';
+    });
+  </script>
+</body>
+
+</html>
