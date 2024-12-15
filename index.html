@@ -41,18 +41,18 @@
 
         .profile {
             position: relative;
-            width: 256px;
-            height: 144px;
+            width: 356px;
+            height: 200px;
             margin: 15px;
             cursor: pointer;
             overflow: hidden;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s;
+            transition: transform 0.3s, width 0.3s, height 0.3s;
         }
 
         .profile:hover {
-            transform: scale(1.1);
+            height: 100%;
         }
 
         .profile img {
@@ -255,6 +255,8 @@
         <img src="https://um2412.renderforest.com/u25148551/visuals/a6d728bc-ecba-448e-90aa-8653b5b93ebf.png" alt="Ojo">
         <span id="visit-count">Cargando total de visitantes</span>
     </div>
+
+
 <script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
