@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="TAL studios">
+    <meta name="description" content="Inicio de sesión con GitHub en T-AnimeL">
+    <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
+    <title>Login - T-AnimeL</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('https://chamidev.github.io/T-AnimeL/fondo.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            font-family: 'MinecraftFont', sans-serif;
+            overflow: hidden;
+        }
+
+        .login-container {
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 20px 40px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-container h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .login-container button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .login-container button:hover {
+            background-color: #218838;
+        }
+
+        .login-container img {
+            margin-bottom: 20px;
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <img src="https://chamidev.github.io/T-AnimeL/ico.png" alt="Logo">
+        <h1>Inicia sesión con GitHub</h1>
+        <button id="login-button">Iniciar sesión con GitHub</button>
+    </div>
+
+    <script type="module">
+        // Import Firebase libraries
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getAuth, GithubAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
+            authDomain: "tanime-l.firebaseapp.com",
+            databaseURL: "https://tanime-l-default-rtdb.firebaseio.com",
+            projectId: "tanime-l",
+            storageBucket: "tanime-l.firebasestorage.app",
+            messagingSenderId: "636577160002",
+            appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // GitHub Authentication
+        const loginButton = document.getElementById("login-button");
+        const provider = new GithubAuthProvider();
+
+        loginButton.addEventListener("click", () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    // Get the GitHub access token
+                    const credential = GithubAuthProvider.credentialFromResult(result);
+                    const token = credential.accessToken;
+
+                    // The signed-in user info
+                    const user = result.user;
+
+                    // Redirect to main page or display user info
+                    window.location.href = "/"; // Adjust the redirect URL if necessary
+                })
+                .catch((error) => {
+                    console.error("Error during GitHub login:", error);
+                });
+        });
+
+        // Check if the user is already authenticated
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Redirect authenticated users to the main page
+                window.location.href = "/";
+            }
+        });
+    </script>
+</body>
+
+</html>
