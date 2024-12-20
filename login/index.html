@@ -13,18 +13,13 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            background-image: url('https://chamidev.github.io/T-AnimeL/fondo.gif');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-color: black;
             display: flex;
             justify-content: center;
             align-items: center;
             user-select: none;
             font-family: 'MinecraftFont', sans-serif;
             overflow: hidden;
+            transition: background 1s ease-in-out;
         }
 
         .login-container {
@@ -153,6 +148,16 @@
                 window.location.href = "https://chamidev.github.io/T-AnimeL/";
             }
         });
+
+        // Change background based on the current time
+        const currentHour = new Date().getHours();
+        if (currentHour >= 6 && currentHour < 18) {
+            // Daytime: Green to Blue gradient
+            document.body.style.background = "linear-gradient(#28a745, #03A9F4)";
+        } else {
+            // Nighttime: Green to Black gradient
+            document.body.style.background = "linear-gradient(to right, #28a745, #000000)";
+        }
     </script>
 </body>
 
