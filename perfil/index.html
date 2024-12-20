@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="TAL studios">
+    <meta name="description" content="Aquí Puedes ver animes de forma gratuita">
+    <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
+    <title>T-AnimeL</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Fondo de la página */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #34495e;
+            margin: 0;
+            color: #ecf0f1;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Contenedor principal */
+        .container {
+            text-align: center;
+            background-color: #1c2833;
+            border-radius: 15px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-out;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Título */
+        h1 {
+            font-size: 2.5rem;
+            color: #2ecc71;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            animation: bounceIn 1s ease-out;
+        }
+
+        /* Animación de rebote */
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Párrafo de texto */
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #bdc3c7;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeText 2s ease-in-out forwards;
+        }
+
+        /* Animación de desvanecimiento del texto */
+        @keyframes fadeText {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Botón de contacto */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #16a085;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #1abc9c;
+            transform: scale(1.1);
+        }
+
+        /* Responsividad */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .container {
+                padding: 30px;
+            }
+        }
+
+        /* Fondo sutil */
+        ::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://source.unsplash.com/1600x900/?nature,clouds,night') center center no-repeat;
+            background-size: cover;
+            filter: blur(8px);
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Estamos en mantenimiento</h1>
+        <p>Disculpa las molestias. Estamos trabajando para mejorar el sitio. Por favor, vuelve más tarde.</p>
+        <a href="#" class="btn">Volver más tarde</a>
+    </div>
+
+</body>
+
+</html>
