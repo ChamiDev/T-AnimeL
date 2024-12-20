@@ -136,6 +136,9 @@
 
                     // Hide login button and show account options
                     document.getElementById("account-options").style.display = 'none';
+
+                    // Automatically redirect to the main page after login
+                    window.location.href = "https://chamidev.github.io/T-AnimeL/"; // Adjust the redirect URL if necessary
                 })
                 .catch((error) => {
                     console.error("Error during GitHub login:", error);
