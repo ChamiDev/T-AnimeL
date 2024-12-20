@@ -279,10 +279,6 @@
 </div>
 
     <div id="animes"></div>
-    <div id="visit-counter">
-        <img src="https://um2412.renderforest.com/u25148551/visuals/a6d728bc-ecba-448e-90aa-8653b5b93ebf.png" alt="Ojo">
-        <span id="visit-count">Cargando total de visitantes</span>
-    </div>
 
 
 <script type="module">
@@ -333,28 +329,6 @@
     });
   }
 
-  // Function to increment page visits using a transaction
-  const countPageVisit = async () => {
-    const visitRef = ref(database, 'visits');
-
-    try {
-      await runTransaction(visitRef, (currentValue) => {
-        return (currentValue || 0) + 1;
-      });
-    } catch (error) {
-      console.error("Error updating visit count:", error);
-    }
-  };
-
-  // Function to display the visit count
-  const displayVisitCount = () => {
-    const visitRef = ref(database, 'visits');
-    onValue(visitRef, (snapshot) => {
-      const count = snapshot.val();
-      document.getElementById('visit-count').textContent = `${count}`;
-    });
-  };
-
   // Function to load and display anime profiles
   const profilesContainer = document.getElementById("animes");
 
@@ -376,7 +350,7 @@
           <div class="profile-info">
             <h3 class="profile-name">${anime.titulo}</h3>
             <p class="profile-description">${anime.descripcion}</p>
-            <button onclick="window.location.href='ver.html?id=${key}'">Ver</button>
+            <button onclick="window.location.href='ver.html?id=${key}'"></button>
           </div>
         `;
 
