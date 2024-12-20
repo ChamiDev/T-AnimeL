@@ -226,6 +226,32 @@
             height: 30px;
             margin-right: 10px;
         }
+
+        .user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.logout-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: #c9302c;
+}
+
     </style>
 </head>
 
@@ -241,11 +267,16 @@
                 <script src="https://cdn.lordicon.com/lordicon.js"></script>
                 <lord-icon src="https://cdn.lordicon.com/hroklero.json" trigger="in" delay="1000" state="in-reveal" colors="primary:#000000,secondary:#000000" style="width:50px;height:50px"></lord-icon>
             </a>
-<div class="menu">
-  <a href="#">Biblioteca</a>
-  <a href="#">Historial</a>
-  <a href="#" id="logout-btn">Cerrar sesión</a>
+<div class="user-info" id="user-info" style="display: none;">
+    <img id="user-photo" src="" alt="Foto de perfil">
+    <p id="user-name"></p>
 </div>
+<div>
+    <a href="#">Biblioteca</a>
+    <a href="#">Historial</a>
+    <button id="logout-btn" class="logout-btn">Cerrar sesión</button>
+</div>
+
 
         </div>
     </div>
@@ -282,11 +313,14 @@
 
   // Check if the user is authenticated
   onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      // If not authenticated, redirect to login
-      window.location.href = "https://chamidev.github.io/T-AnimeL/login/";
+    if (user) {
+      // Show user info if authenticated
+      document.getElementById("user-photo").src = user.photoURL;
+      document.getElementById("user-name").textContent = user.displayName;
+      document.getElementById("user-info").style.display = 'flex'; // Show user info
     } else {
-      console.log("Usuario autenticado:", user.email);
+      // If no user is authenticated, redirect to login page
+      window.location.href = "https://chamidev.github.io/T-AnimeL/login/";
     }
   });
 
@@ -362,6 +396,45 @@
   displayVisitCount();
   loadAnimes();
 </script>
+
+<!-- HTML for user info and menu -->
+<div class="user-info" id="user-info" style="display: none;">
+  <img id="user-photo" src="" alt="Foto de perfil">
+  <p id="user-name"></p>
+</div>
+<div>
+  <a href="#">Biblioteca</a>
+  <a href="#">Historial</a>
+  <button id="logout-btn" class="logout-btn">Cerrar sesión</button>
+</div>
+
+<!-- CSS for styling the user info and buttons -->
+<style>
+  .user-info {
+      display: flex;
+      align-items: center;
+  }
+
+  .user-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+  }
+
+  .logout-btn {
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+  }
+
+  .logout-btn:hover {
+      background-color: #c9302c;
+  }
+</style>
 </body>
 
 </html>
