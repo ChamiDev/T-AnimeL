@@ -276,72 +276,74 @@
         </a>
     </footer>
 
-    <script type="module">
-        // Import Firebase libraries
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+<script type="module">
+    // Import Firebase libraries
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
-            authDomain: "tanime-l.firebaseapp.com",
-            databaseURL: "https://tanime-l-default-rtdb.firebaseio.com",
-            projectId: "tanime-l",
-            storageBucket: "tanime-l.firebasestorage.app",
-            messagingSenderId: "636577160002",
-            appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
-        };
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
+        authDomain: "tanime-l.firebaseapp.com",
+        databaseURL: "https://tanime-l-default-rtdb.firebaseio.com",
+        projectId: "tanime-l",
+        storageBucket: "tanime-l.firebasestorage.app",
+        messagingSenderId: "636577160002",
+        appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
+    };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-        // Reference to the Anime node in the Realtime Database
-        const animeRef = ref(db, "Anime");
+    // Reference to the Anime node in the Realtime Database
+    const animeRef = ref(db, "Anime");
 
-        // Fetch anime data and render it
-        const animeContainer = document.getElementById("anime-container");
-        const loader = document.getElementById("loader");
+    // Fetch anime data and render it
+    const animeContainer = document.getElementById("anime-container");
+    const loader = document.getElementById("loader");
 
-        onValue(animeRef, (snapshot) => {
-            const data = snapshot.val();
+    onValue(animeRef, (snapshot) => {
+        const data = snapshot.val();
 
-            // Clear container
-            animeContainer.innerHTML = "";
+        // Clear container
+        animeContainer.innerHTML = "";
 
-            // Loop through the data and create cards
-            Object.values(data).forEach((anime) => {
-                const animeCard = document.createElement("div");
-                animeCard.className = "anime-card";
-                animeCard.innerHTML = `
-                    <img src="${anime.portada}" alt="Portada de ${anime.titulo}" />
-                    <h2>${anime.titulo}</h2><a class="guardar"></a>
-                `;
-                animeCard.addEventListener("click", () => {
-                    // Redirect to the specific anime page with its ID
-                    window.location.href = `https://chamidev.github.io/T-AnimeL/ver.html?id=${anime.id}`;
-                });
-
-                animeContainer.appendChild(animeCard);
+        // Loop through the data and create cards using the keys (IDs)
+        Object.keys(data).forEach((id) => {
+            const anime = data[id];
+            const animeCard = document.createElement("div");
+            animeCard.className = "anime-card";
+            animeCard.innerHTML = `
+                <img src="${anime.portada}" alt="Portada de ${anime.titulo}" />
+                <h2>${anime.titulo}</h2><a class="guardar"></a>
+            `;
+            animeCard.addEventListener("click", () => {
+                // Redirect to the specific anime page with its ID (which is the key)
+                window.location.href = `https://chamidev.github.io/T-AnimeL/ver.html?id=${id}`;
             });
 
-            // Hide loader and show content
-            loader.style.display = "none";
-            animeContainer.style.visibility = "visible";
+            animeContainer.appendChild(animeCard);
         });
 
-        // Search functionality
-        const searchInput = document.getElementById("searchInput");
+        // Hide loader and show content
+        loader.style.display = "none";
+        animeContainer.style.visibility = "visible";
+    });
 
-        searchInput.addEventListener("input", () => {
-            const searchText = searchInput.value.toLowerCase();
+    // Search functionality
+    const searchInput = document.getElementById("searchInput");
 
-            document.querySelectorAll(".anime-card").forEach(card => {
-                const title = card.querySelector("h2").textContent.toLowerCase();
-                card.style.display = title.includes(searchText) ? "block" : "none";
-            });
+    searchInput.addEventListener("input", () => {
+        const searchText = searchInput.value.toLowerCase();
+
+        document.querySelectorAll(".anime-card").forEach(card => {
+            const title = card.querySelector("h2").textContent.toLowerCase();
+            card.style.display = title.includes(searchText) ? "block" : "none";
         });
-    </script>
+    });
+</script>
+
 </body>
 
 </html>
