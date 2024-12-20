@@ -241,11 +241,12 @@
                 <script src="https://cdn.lordicon.com/lordicon.js"></script>
                 <lord-icon src="https://cdn.lordicon.com/hroklero.json" trigger="in" delay="1000" state="in-reveal" colors="primary:#000000,secondary:#000000" style="width:50px;height:50px"></lord-icon>
             </a>
-            <div class="menu">
-                <a href="#">Biblioteca</a>
-                <a href="#">Historial</a>
-                <a href="#">Cerrar sesión</a>
-            </div>
+<div class="menu">
+  <a href="#">Biblioteca</a>
+  <a href="#">Historial</a>
+  <a href="#" id="logout-btn">Cerrar sesión</a>
+</div>
+
         </div>
     </div>
 
@@ -261,7 +262,7 @@
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
   import { getDatabase, ref, runTransaction, onValue, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
   // Firebase configuration
   const firebaseConfig = {
@@ -288,6 +289,19 @@
       console.log("Usuario autenticado:", user.email);
     }
   });
+
+  // Handle sign-out
+  const logoutButton = document.getElementById('logout-btn');
+  if (logoutButton) {
+    logoutButton.addEventListener('click', () => {
+      signOut(auth).then(() => {
+        // Redirect to login page after sign-out
+        window.location.href = "https://chamidev.github.io/T-AnimeL/login/";
+      }).catch((error) => {
+        console.error('Error al cerrar sesión:', error);
+      });
+    });
+  }
 
   // Function to increment page visits using a transaction
   const countPageVisit = async () => {
