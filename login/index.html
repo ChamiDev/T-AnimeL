@@ -82,17 +82,22 @@
         <img src="https://chamidev.github.io/T-AnimeL/ico.png" alt="Logo">
         <h1>Inicia sesión con GitHub</h1>
         <button id="login-button">Iniciar sesión con GitHub</button>
-        <!-- User info section, hidden by default -->
-        <div class="user-info" id="user-info">
+        <div id="user-info" class="user-info">
             <img id="user-photo" src="" alt="Foto de perfil">
             <p id="user-name">Nombre de usuario</p>
+            <button id="logout-button">Cerrar sesión</button>
+        </div>
+        <div id="account-options" class="user-info" style="display:none;">
+            <p>¿Quieres continuar con tu cuenta?</p>
+            <button id="continue-button">Continuar con esta cuenta</button>
+            <button id="switch-account-button">Iniciar sesión con otra cuenta</button>
         </div>
     </div>
 
     <script type="module">
         // Import Firebase libraries
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getAuth, GithubAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+        import { getAuth, GithubAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -111,15 +116,16 @@
 
         // GitHub Authentication
         const loginButton = document.getElementById("login-button");
+        const continueButton = document.getElementById("continue-button");
+        const switchAccountButton = document.getElementById("switch-account-button");
+        const logoutButton = document.getElementById("logout-button");
+
         const provider = new GithubAuthProvider();
 
+        // Log in with GitHub
         loginButton.addEventListener("click", () => {
             signInWithPopup(auth, provider)
                 .then((result) => {
-                    // Get the GitHub access token
-                    const credential = GithubAuthProvider.credentialFromResult(result);
-                    const token = credential.accessToken;
-
                     // The signed-in user info
                     const user = result.user;
 
@@ -128,34 +134,61 @@
                     document.getElementById("user-name").textContent = user.displayName;
                     document.getElementById("user-info").style.display = 'block'; // Show user info
 
-                    // Redirect to main page
-                    window.location.href = "https://chamidev.github.io/T-AnimeL/"; // Adjust the redirect URL if necessary
+                    // Hide login button and show account options
+                    document.getElementById("account-options").style.display = 'none';
                 })
                 .catch((error) => {
                     console.error("Error during GitHub login:", error);
                 });
         });
 
-        // Check if the user is already authenticated
+        // Check if user is authenticated
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // Display user info if authenticated
                 document.getElementById("user-photo").src = user.photoURL;
                 document.getElementById("user-name").textContent = user.displayName;
                 document.getElementById("user-info").style.display = 'block'; // Show user info
-
-                // Redirect authenticated users to the main page
-                window.location.href = "https://chamidev.github.io/T-AnimeL/";
+                document.getElementById("account-options").style.display = 'block'; // Show account options
+                document.getElementById("login-button").style.display = 'none'; // Hide login button
+            } else {
+                document.getElementById("login-button").style.display = 'block'; // Show login button
+                document.getElementById("account-options").style.display = 'none'; // Hide account options
             }
+        });
+
+        // Continue with the current account
+        continueButton.addEventListener("click", () => {
+            window.location.href = "https://chamidev.github.io/T-AnimeL/"; // Redirect to the main page
+        });
+
+        // Switch account (sign out)
+        switchAccountButton.addEventListener("click", () => {
+            signOut(auth).then(() => {
+                console.log("User signed out.");
+                document.getElementById("user-info").style.display = 'none';
+                document.getElementById("login-button").style.display = 'block'; // Show login button
+            }).catch((error) => {
+                console.error("Error signing out:", error);
+            });
+        });
+
+        // Log out
+        logoutButton.addEventListener("click", () => {
+            signOut(auth).then(() => {
+                console.log("User signed out.");
+                document.getElementById("user-info").style.display = 'none';
+                document.getElementById("login-button").style.display = 'block'; // Show login button
+            }).catch((error) => {
+                console.error("Error signing out:", error);
+            });
         });
 
         // Change background based on the current time
         const currentHour = new Date().getHours();
         if (currentHour >= 6 && currentHour < 18) {
-            // Daytime: Green to Blue gradient
-            document.body.style.background = "linear-gradient(#28a745, #03A9F4)";
+            document.body.style.background = "linear-gradient(to right, #28a745, #03A9F4)";
         } else {
-            // Nighttime: Green to Black gradient
             document.body.style.background = "linear-gradient(to right, #28a745, #000000)";
         }
     </script>
