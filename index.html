@@ -261,6 +261,7 @@
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
   import { getDatabase, ref, runTransaction, onValue, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
   // Firebase configuration
   const firebaseConfig = {
@@ -276,6 +277,17 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
+  const auth = getAuth(app);
+
+  // Check if the user is authenticated
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      // If not authenticated, redirect to login
+      window.location.href = "/login/";
+    } else {
+      console.log("Usuario autenticado:", user.email);
+    }
+  });
 
   // Function to increment page visits using a transaction
   const countPageVisit = async () => {
@@ -336,7 +348,6 @@
   displayVisitCount();
   loadAnimes();
 </script>
-
 </body>
 
 </html>
