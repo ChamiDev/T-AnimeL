@@ -33,7 +33,6 @@
         #profile-container {
             width: 95%;
             max-width: 800px;
-            height: auto;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
             padding: 20px;
@@ -214,7 +213,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-    import { getDatabase, ref, get, set, update, query, equalTo, orderByChild } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+    import { getDatabase, ref, get, update, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
     const firebaseConfig = {
@@ -241,9 +240,11 @@
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     document.getElementById("name").value = data.nombre || "";
-                    document.getElementById("email").value = user.email;
-                    document.getElementById("method").value = user.providerData[0].providerId;
+                    document.getElementById("email").value = user.email || "No disponible";
+                    document.getElementById("method").value = user.providerData[0].providerId || "Desconocido";
                     document.getElementById("profile-pic").src = data.foto || "https://via.placeholder.com/80";
+                } else {
+                    console.error("No se encontraron datos del usuario.");
                 }
             });
         } else {
