@@ -5,154 +5,248 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="TAL studios">
-    <meta name="description" content="Aquí Puedes ver animes de forma gratuita">
+    <meta name="description" content="Explora tus animes favoritos guardados en tu cuenta">
     <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
-    <title>T-AnimeL</title>
+    <title>Mis Favoritos</title>
     <style>
-        /* General Reset */
+        /* Estilos generales */
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
-        /* Fondo de la página */
         body {
-            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            background: #004d00;
+            background-image: url('https://chamidev.github.io/T-AnimeL/fondo.png');
+            background-repeat: repeat;
+            background-size: 300px;
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #34495e;
-            margin: 0;
-            color: #ecf0f1;
             overflow: hidden;
-            user-select: none;
         }
 
-        /* Contenedor principal */
-        .container {
-            text-align: center;
-            background-color: #1c2833;
-            border-radius: 15px;
-            padding: 50px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 1s ease-out;
-            width: 90%;
-            max-width: 600px;
+        #favorites-container {
+            width: 95%;
+            max-width: 1200px;
+            height: 85%;
+            margin-bottom: 70px;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Animación de entrada */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Título */
         h1 {
-            font-size: 2.5rem;
-            color: #2ecc71;
+            font-size: clamp(24px, 4vw, 32px);
             margin-bottom: 20px;
-            letter-spacing: 2px;
-            animation: bounceIn 1s ease-out;
         }
 
-        /* Animación de rebote */
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-            }
+        .anime-card {
+            width: 90%;
+            max-width: 800px;
+            background-color: #333;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
-        /* Párrafo de texto */
-        p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #bdc3c7;
-            margin-bottom: 30px;
-            opacity: 0;
-            animation: fadeText 2s ease-in-out forwards;
+        .anime-card img {
+            width: 80%;
+            max-width: 300px;
+            border-radius: 10px;
+            margin-bottom: 10px;
         }
 
-        /* Animación de desvanecimiento del texto */
-        @keyframes fadeText {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
+        .anime-card h2 {
+            font-size: 20px;
+            margin: 10px 0;
         }
 
-        /* Botón de contacto */
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background-color: #16a085;
-            color: #ffffff;
-            font-size: 1rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 50px;
-            margin-top: 20px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+        .anime-card button {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
-        .btn:hover {
-            background-color: #1abc9c;
-            transform: scale(1.1);
+        .anime-card button:hover {
+            background-color: #218838;
         }
-
-        /* Responsividad */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            p {
-                font-size: 1rem;
-            }
-
-            .container {
-                padding: 30px;
-            }
-        }
-
-        /* Fondo sutil */
-        ::after {
-            content: "";
-            position: absolute;
-            top: 0;
+        
+        /* Footer Styles */
+        footer {
+            position: fixed;
+            bottom: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://source.unsplash.com/1600x900/?nature,clouds,night') center center no-repeat;
-            background-size: cover;
-            filter: blur(8px);
-            z-index: -1;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            text-align: center;
+            color: white;
+            font-size: 16px;
+            z-index: 10;
+        }
+
+        footer a {
+            color: #00FF00;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #FFFFFF;
+        }
+
+        /* Lordicon Styles */
+        footer lord-icon {
+            margin: 0 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        footer lord-icon:hover {
+            transform: scale(1.2);
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <h1>Estamos en mantenimiento</h1>
-        <p>Disculpa las molestias. Estamos trabajando para mejorar el sitio. Por favor, vuelve más tarde.</p>
-        <a href="#" class="btn">Volver más tarde</a>
+<div id="favorites-container">
+    <h1>Mis Animes Favoritos</h1>
+    <div id="favorites-list">
+        <!-- Aquí se cargarán los animes favoritos con JavaScript -->
     </div>
+</div>
+    <!-- Footer Menu -->
+    <footer>
+        <!-- Home Icon -->
+        <a href="#">
+            <script src="https://cdn.lordicon.com/lordicon.js"></script>
+            <lord-icon
+                src="https://cdn.lordicon.com/dznelzdk.json"
+                trigger="in"
+                delay="1500"
+                state="in-reveal"
+                colors="primary:#000000,secondary:#0a5c15,tertiary:#109121,quaternary:#16c72e,quinary:#000000,senary:#e4e4e4"
+                style="width:50px;height:50px">
+            </lord-icon>
+        </a>
+
+        <!-- Biblioteca Icon -->
+        <a href="https://chamidev.github.io/T-AnimeL/biblioteca/">
+            <script src="https://cdn.lordicon.com/lordicon.js"></script>
+            <lord-icon
+                src="https://cdn.lordicon.com/yynwzrgh.json"
+                trigger="in"
+                delay="1500"
+                state="in-reveal"
+                colors="primary:#0a5c15,secondary:#109121,tertiary:#16c72e,quaternary:#66ee78,quinary:#9cf4a7"
+                style="width:50px;height:50px">
+            </lord-icon>
+        </a>
+
+        <!-- Profile Icon -->
+        <a href="https://chamidev.github.io/T-AnimeL/perfil/">
+            <script src="https://cdn.lordicon.com/lordicon.js"></script>
+            <lord-icon
+                src="https://cdn.lordicon.com/hroklero.json"
+                trigger="in"
+                delay="1500"
+                state="in-reveal"
+                colors="primary:#0a5c15,secondary:#109121"
+                style="width:50px;height:50px">
+            </lord-icon>
+        </a>
+    </footer>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+    // Configuración de Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
+        authDomain: "tanime-l.firebaseapp.com",
+        projectId: "tanime-l",
+        storageBucket: "tanime-l.firebasestorage.app",
+        messagingSenderId: "636577160002",
+        appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    const favoritesList = document.getElementById("favorites-list");
+
+    // Verificar el usuario autenticado
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            const userId = user.uid;
+            const userFavoritesRef = ref(database, `users/${userId}/savedAnimes`);
+
+            // Cargar los animes guardados
+            get(userFavoritesRef).then(snapshot => {
+                if (snapshot.exists()) {
+                    const savedAnimes = snapshot.val();
+                    Object.keys(savedAnimes).forEach(animeId => {
+                        const animeRef = ref(database, `Anime/${animeId}`);
+                        get(animeRef).then(animeSnapshot => {
+                            if (animeSnapshot.exists()) {
+                                const anime = animeSnapshot.val();
+                                renderAnimeCard(animeId, anime);
+                            }
+                        }).catch(error => {
+                            console.error("Error al cargar el anime: ", error);
+                        });
+                    });
+                } else {
+                    favoritesList.innerHTML = "<p>No tienes animes guardados en tus favoritos.</p>";
+                }
+            }).catch(error => {
+                console.error("Error al cargar los favoritos: ", error);
+                favoritesList.innerHTML = "<p>Ocurrió un error al cargar tus favoritos.</p>";
+            });
+        } else {
+            favoritesList.innerHTML = "<p>Debes iniciar sesión para ver tus animes favoritos.</p>";
+        }
+    });
+
+    // Renderizar cada anime como una tarjeta
+    function renderAnimeCard(animeId, anime) {
+        const card = document.createElement("div");
+        card.classList.add("anime-card");
+
+        card.innerHTML = `
+            <img src="${anime.portada}" alt="${anime.titulo}">
+            <h2>${anime.titulo}</h2>
+            <p>${anime.descripcion}</p>
+            <button onclick="window.location.href='verAnime.html?id=${animeId}'">Ver Anime</button>
+        `;
+
+        favoritesList.appendChild(card);
+    }
+</script>
 
 </body>
 
