@@ -5,154 +5,284 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="TAL studios">
-    <meta name="description" content="Aquí Puedes ver animes de forma gratuita">
+    <meta name="description" content="Administra y edita los datos de tu perfil de usuario">
     <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
-    <title>T-AnimeL</title>
+    <title>Mi Perfil</title>
     <style>
-        /* General Reset */
+        /* Estilo general */
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
-        /* Fondo de la página */
         body {
-            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            background: #004d00;
+            background-image: url('https://chamidev.github.io/T-AnimeL/fondo.png');
+            background-repeat: repeat;
+            background-size: 300px;
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #34495e;
-            margin: 0;
-            color: #ecf0f1;
+            align-items: flex-start;
+            flex-direction: column;
             overflow: hidden;
-            user-select: none;
         }
 
-        /* Contenedor principal */
-        .container {
-            text-align: center;
-            background-color: #1c2833;
-            border-radius: 15px;
-            padding: 50px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 1s ease-out;
-            width: 90%;
-            max-width: 600px;
+        #profile-container {
+            width: 95%;
+            max-width: 800px;
+            height: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            margin-top: 60px;
         }
 
-        /* Animación de entrada */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Título */
         h1 {
-            font-size: 2.5rem;
-            color: #2ecc71;
+            font-size: clamp(24px, 4vw, 32px);
             margin-bottom: 20px;
-            letter-spacing: 2px;
-            animation: bounceIn 1s ease-out;
+            text-align: center;
         }
 
-        /* Animación de rebote */
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-            }
+        .profile-row {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
         }
 
-        /* Párrafo de texto */
-        p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #bdc3c7;
-            margin-bottom: 30px;
-            opacity: 0;
-            animation: fadeText 2s ease-in-out forwards;
-        }
-
-        /* Animación de desvanecimiento del texto */
-        @keyframes fadeText {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        /* Botón de contacto */
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background-color: #16a085;
-            color: #ffffff;
-            font-size: 1rem;
+        .profile-row label {
+            width: 30%;
             font-weight: bold;
-            text-decoration: none;
-            border-radius: 50px;
+            margin-right: 10px;
+        }
+
+        .profile-row input {
+            width: 70%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .profile-row img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .profile-row .edit-btn {
+            padding: 8px 12px;
+            margin-left: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .profile-row .edit-btn:hover {
+            background-color: #218838;
+        }
+
+        .profile-actions {
             margin-top: 20px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
         }
 
-        .btn:hover {
-            background-color: #1abc9c;
-            transform: scale(1.1);
+        .save-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
         }
 
-        /* Responsividad */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            p {
-                font-size: 1rem;
-            }
-
-            .container {
-                padding: 30px;
-            }
+        .save-btn:hover {
+            background-color: #0056b3;
         }
 
-        /* Fondo sutil */
-        ::after {
-            content: "";
+        /* Navbar */
+        .nav {
+            width: 94%;
+            height: 45px;
+            background-color: green;
+            position: fixed;
+            top: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            z-index: 1000;
+        }
+
+        .navimg {
+            height: 30px;
+            background-color: white;
+            box-shadow: 0px 0px 5px 5px white;
+            border-radius: 50%;
+        }
+
+        .cuenta {
+            position: relative;
+        }
+
+        .cuenta .menu {
+            display: none;
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://source.unsplash.com/1600x900/?nature,clouds,night') center center no-repeat;
-            background-size: cover;
-            filter: blur(8px);
-            z-index: -1;
+            right: 0;
+            top: 35px;
+            background-color: #333;
+            border-radius: 5px;
+            width: 150px;
+            z-index: 1;
+        }
+
+        .cuenta:hover .menu {
+            display: block;
+        }
+
+        .cuenta .menu a {
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            border-bottom: 1px solid #444;
+        }
+
+        .cuenta .menu a:hover {
+            background-color: #555;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <h1>Estamos en mantenimiento</h1>
-        <p>Disculpa las molestias. Estamos trabajando para mejorar el sitio. Por favor, vuelve más tarde.</p>
-        <a href="#" class="btn">Volver más tarde</a>
+<div class="nav">
+    <img class="navimg" src="https://chamidev.github.io/T-AnimeL/ico.png" alt="Logo">
+    <div class="cuenta">
+        <img class="navimg" src="https://via.placeholder.com/30" alt="Cuenta">
+        <div class="menu">
+            <a href="perfil.html">Mi perfil</a>
+            <a href="favoritos.html">Mis favoritos</a>
+            <a href="logout.html">Cerrar sesión</a>
+        </div>
     </div>
+</div>
+
+<div id="profile-container">
+    <h1>Mi Perfil</h1>
+
+    <div class="profile-row">
+        <label for="profile-pic">Foto de perfil:</label>
+        <img id="profile-pic" src="https://via.placeholder.com/80" alt="Foto de perfil">
+        <input type="file" id="upload-pic" style="display: none;">
+        <button class="edit-btn" onclick="document.getElementById('upload-pic').click()">Cambiar</button>
+    </div>
+
+    <div class="profile-row">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" placeholder="Nombre de usuario">
+    </div>
+
+    <div class="profile-row">
+        <label for="email">Correo:</label>
+        <input type="email" id="email" disabled>
+    </div>
+
+    <div class="profile-row">
+        <label for="method">Método de inicio:</label>
+        <input type="text" id="method" disabled>
+    </div>
+
+    <div class="profile-actions">
+        <button class="save-btn" onclick="saveProfile()">Guardar Cambios</button>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getDatabase, ref, get, set, update, query, equalTo, orderByChild } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
+        authDomain: "tanime-l.firebaseapp.com",
+        projectId: "tanime-l",
+        storageBucket: "tanime-l.firebasestorage.app",
+        messagingSenderId: "636577160002",
+        appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth(app);
+
+    let currentUserId;
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUserId = user.uid;
+
+            const userRef = ref(database, `Usuarios/${currentUserId}`);
+            get(userRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    document.getElementById("name").value = data.nombre || "";
+                    document.getElementById("email").value = user.email;
+                    document.getElementById("method").value = user.providerData[0].providerId;
+                    document.getElementById("profile-pic").src = data.foto || "https://via.placeholder.com/80";
+                }
+            });
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    async function saveProfile() {
+        const newName = document.getElementById("name").value.trim();
+        const userRef = ref(database, `Usuarios/${currentUserId}`);
+        const nameQuery = query(ref(database, "Usuarios"), orderByChild("nombre"), equalTo(newName));
+
+        if (newName === "") {
+            alert("El nombre no puede estar vacío.");
+            return;
+        }
+
+        get(nameQuery).then((snapshot) => {
+            if (snapshot.exists() && !snapshot.hasChild(currentUserId)) {
+                alert("Este nombre ya está en uso.");
+            } else {
+                const updates = { nombre: newName };
+
+                const fileInput = document.getElementById("upload-pic");
+                const file = fileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        updates.foto = reader.result;
+                        update(userRef, updates).then(() => alert("Perfil actualizado con éxito."));
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    update(userRef, updates).then(() => alert("Perfil actualizado con éxito."));
+                }
+            }
+        });
+    }
+</script>
 
 </body>
 
