@@ -185,6 +185,7 @@
 <body>
 
 <div id="anime-container">
+    <button class="save-btn" id="save-anime">Guardar anime</button>
     <div id="anime-details">
         <!-- Aquí se cargarán los detalles del anime con JavaScript -->
     </div>
@@ -192,8 +193,10 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
+    // Configuración de Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
         authDomain: "tanime-l.firebaseapp.com",
@@ -204,10 +207,12 @@
     };
 
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const database = getDatabase(app);
 
     const urlParams = new URLSearchParams(window.location.search);
     const animeId = urlParams.get('id');
+    const saveButton = document.getElementById("save-anime");
 
     if (!animeId) {
         window.location.href = "index.html";
@@ -253,6 +258,30 @@
             console.error("Error al cargar los datos del anime: ", error);
         });
     }
+
+    // Guardar anime en los datos del usuario
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            saveButton.addEventListener("click", () => {
+                const userId = user.uid;
+                const userAnimeRef = ref(database, `users/${userId}/savedAnimes/${animeId}`);
+
+                set(userAnimeRef, {
+                    id: animeId,
+                    timestamp: Date.now()
+                }).then(() => {
+                    alert("Anime guardado correctamente.");
+                }).catch(error => {
+                    console.error("Error al guardar el anime: ", error);
+                    alert("Hubo un error al guardar el anime.");
+                });
+            });
+        } else {
+            saveButton.addEventListener("click", () => {
+                alert("Debes iniciar sesión para guardar animes.");
+            });
+        }
+    });
 </script>
 
 </body>
