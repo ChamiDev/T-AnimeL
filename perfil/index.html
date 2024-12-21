@@ -5,154 +5,244 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="TAL studios">
-    <meta name="description" content="Aquí Puedes ver animes de forma gratuita">
+    <meta name="description" content="Ver tu perfil y gestionar tu sesión en T-AnimeL">
     <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
-    <title>T-AnimeL</title>
+    <title>Mi Perfil</title>
     <style>
-        /* General Reset */
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
-        /* Fondo de la página */
         body {
-            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            background: #004d00;
+            background-image: url('https://chamidev.github.io/T-AnimeL/fondo.png');
+            background-repeat: repeat;
+            background-size: 300px;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #profile-container {
+            width: 95%;
+            max-width: 1200px;
+            height: 85%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 60px; /* Espacio para el navbar */
+        }
+
+        h1 {
+            font-size: clamp(24px, 4vw, 32px);
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .profile-info img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .profile-info h2 {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .profile-info p {
+            font-size: 16px;
+            color: #aaa;
+            margin: 5px 0;
+        }
+
+        button {
+            width: 50%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        /* Estilos del navbar */
+        .nav {
+            width: 94%;
+            height: 45px;
+            background-color: green;
+            position: fixed;
+            top: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            z-index: 1000;
+        }
+
+        .navimg {
+            height: 30px;
+            background-color: white;
+            box-shadow: 0px 0px 5px 5px white;
+            border-radius: 50%;
+        }
+
+        .cuenta {
+            position: relative;
+        }
+
+        .cuenta .menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 35px;
+            background-color: #333;
+            border-radius: 5px;
+            width: 150px;
+            z-index: 1;
+        }
+
+        .cuenta:hover .menu {
+            display: block;
+        }
+
+        .cuenta .menu a {
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            border-bottom: 1px solid #444;
+        }
+
+        .cuenta .menu a:hover {
+            background-color: #555;
+        }
+
+        .search-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #34495e;
-            margin: 0;
-            color: #ecf0f1;
-            overflow: hidden;
-            user-select: none;
+            flex-grow: 1;
         }
 
-        /* Contenedor principal */
-        .container {
-            text-align: center;
-            background-color: #1c2833;
-            border-radius: 15px;
-            padding: 50px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 1s ease-out;
+        .search-container input {
             width: 90%;
-            max-width: 600px;
-        }
-
-        /* Animación de entrada */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Título */
-        h1 {
-            font-size: 2.5rem;
-            color: #2ecc71;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-            animation: bounceIn 1s ease-out;
-        }
-
-        /* Animación de rebote */
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Párrafo de texto */
-        p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #bdc3c7;
-            margin-bottom: 30px;
-            opacity: 0;
-            animation: fadeText 2s ease-in-out forwards;
-        }
-
-        /* Animación de desvanecimiento del texto */
-        @keyframes fadeText {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        /* Botón de contacto */
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background-color: #16a085;
-            color: #ffffff;
-            font-size: 1rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 50px;
-            margin-top: 20px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .btn:hover {
-            background-color: #1abc9c;
-            transform: scale(1.1);
-        }
-
-        /* Responsividad */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            p {
-                font-size: 1rem;
-            }
-
-            .container {
-                padding: 30px;
-            }
-        }
-
-        /* Fondo sutil */
-        ::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://source.unsplash.com/1600x900/?nature,clouds,night') center center no-repeat;
-            background-size: cover;
-            filter: blur(8px);
-            z-index: -1;
+            padding: 5px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <h1>Estamos en mantenimiento</h1>
-        <p>Disculpa las molestias. Estamos trabajando para mejorar el sitio. Por favor, vuelve más tarde.</p>
-        <a href="#" class="btn">Volver más tarde</a>
+<div class="nav">
+    <img class="navimg" src="https://chamidev.github.io/T-AnimeL/ico.png" alt="Logo">
+    <div class="search-container">
+        <input type="text" placeholder="Buscar animes...">
     </div>
+    <div class="cuenta">
+        <img class="navimg" src="https://via.placeholder.com/30" alt="Cuenta">
+        <div class="menu">
+            <a href="perfil.html">Mi perfil</a>
+            <a href="favoritos.html">Mis favoritos</a>
+            <a href="logout.html">Cerrar sesión</a>
+        </div>
+    </div>
+</div>
+
+<div id="profile-container">
+    <h1>Mi Perfil</h1>
+    <div class="profile-info">
+        <img id="profile-picture" src="https://via.placeholder.com/120" alt="Foto de perfil">
+        <h2 id="user-name">Usuario: Juan Pérez</h2>
+        <p id="user-email">Correo electrónico: usuario@example.com</p>
+        <button id="auth-button">Cerrar sesión</button>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
+        authDomain: "tanime-l.firebaseapp.com",
+        projectId: "tanime-l",
+        storageBucket: "tanime-l.firebasestorage.app",
+        messagingSenderId: "636577160002",
+        appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const profilePicture = document.getElementById("profile-picture");
+    const userName = document.getElementById("user-name");
+    const userEmail = document.getElementById("user-email");
+    const authButton = document.getElementById("auth-button");
+
+    // Verificar el usuario autenticado
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            // Usuario autenticado
+            const { displayName, email, photoURL } = user;
+
+            // Mostrar los detalles del usuario
+            profilePicture.src = photoURL || "https://via.placeholder.com/120";  // Foto de perfil
+            userName.textContent = `Usuario: ${displayName || 'Nombre no disponible'}`;
+            userEmail.textContent = `Correo electrónico: ${email}`;
+
+            // Cambiar el texto y la función del botón
+            authButton.textContent = "Cerrar sesión";
+            authButton.onclick = () => {
+                signOut(auth).then(() => {
+                    window.location.href = "index.html"; // Redirigir a la página de inicio después de cerrar sesión
+                }).catch(error => {
+                    console.error("Error al cerrar sesión: ", error);
+                });
+            };
+        } else {
+            // Usuario no autenticado
+            userName.textContent = "Usuario no autenticado";
+            userEmail.textContent = "No has iniciado sesión.";
+
+            authButton.textContent = "Iniciar sesión";
+            authButton.onclick = () => {
+                window.location.href = "login.html"; // Redirigir a la página de inicio de sesión
+            };
+        }
+    });
+</script>
 
 </body>
 
