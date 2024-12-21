@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="TAL studios">
+    <meta name="description" content="Aquí puedes ver las temporadas y capítulos de tu anime favorito">
+    <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
+    <title>Ver Anime</title>
+<style>
+    /* Estilos base */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        height: 100vh;
+        background: #004d00;
+        background-image: url('https://chamidev.github.io/T-AnimeL/fondo.png');
+        background-repeat: repeat;
+        background-size: 300px;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    #anime-container {
+        width: 95%;
+        max-width: 1200px;
+        height: 90%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        padding: 20px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-y: auto;
+        position: relative;
+    }
+
+    .save-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background-color: gray;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s ease;
+    }
+
+    .save-btn.saved {
+        background-color: green;
+    }
+
+    .save-btn span {
+        font-size: 20px;
+        color: white;
+        pointer-events: none;
+    }
+
+    h1, h2, h3 {
+        font-size: clamp(20px, 3vw, 24px);
+        margin: 10px 0;
+    }
+
+    img {
+        width: 80%;
+        max-width: 400px;
+        object-fit: contain;
+        margin: 20px 0;
+        border-radius: 10px;
+    }
+
+    button {
+        width: 80%;
+        padding: 10px 20px;
+        margin: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background-color: #218838;
+    }
+
+    #seasons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    .season {
+        margin: 10px;
+        text-align: center;
+        background-color: #333;
+        padding: 10px;
+        border-radius: 8px;
+        width: 90%;
+        box-sizing: border-box;
+    }
+
+    .season button {
+        width: 90%;
+    }
+
+    .nav {
+        width: 94%;
+        height: 45px;
+        background-color: green;
+        position: absolute;
+        top: 3px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 15px;
+    }
+
+    .navimg {
+        height: 30px;
+        background-color: white;
+        box-shadow: 0px 0px 5px 5px white;
+        border-radius: 50%;
+    }
+
+    .cuenta {
+        position: relative;
+    }
+
+    .cuenta .menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 35px;
+        background-color: #333;
+        border-radius: 5px;
+        width: 150px;
+        z-index: 1;
+    }
+
+    .cuenta:hover .menu {
+        display: block;
+    }
+
+    .cuenta .menu a {
+        color: white;
+        padding: 10px;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        border-bottom: 1px solid #444;
+    }
+
+    .cuenta .menu a:hover {
+        background-color: #555;
+    }
+
+    .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+    }
+
+    .search-container input {
+        width: 90%;
+        padding: 5px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
+
+    *::-webkit-scrollbar {
+        height: 5px;
+        width: 5px;
+    }
+
+    *::-webkit-scrollbar-track {
+        border-radius: 5px;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    *::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: #107500;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        background-color: #62A34B;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="anime-container">
+    <button class="save-btn" id="save-anime">
+        <span>★</span>
+    </button>
+    <div id="anime-details">
+        <!-- Aquí se cargarán los detalles del anime con JavaScript -->
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getDatabase, ref, set, get, remove } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+    // Configuración de Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
+        authDomain: "tanime-l.firebaseapp.com",
+        projectId: "tanime-l",
+        storageBucket: "tanime-l.firebasestorage.app",
+        messagingSenderId: "636577160002",
+        appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const animeId = urlParams.get('id');
+    const saveButton = document.getElementById("save-anime");
+
+    if (!animeId) {
+        window.location.href = "index.html";
+    } else {
+        const animeRef = ref(database, 'Anime/' + animeId);
+        get(animeRef).then(snapshot => {
+            if (snapshot.exists()) {
+                const anime = snapshot.val();
+                const animeDetailsContainer = document.getElementById("anime-details");
+
+                animeDetailsContainer.innerHTML = `
+                    <h1>${anime.titulo}</h1>
+                    <img src="${anime.portada}" alt="${anime.titulo}">
+                    <p>${anime.descripcion}</p>
+                    <h2>Temporadas</h2>
+                    <div id="seasons"></div>
+                `;
+
+                const seasonsContainer = document.getElementById("seasons");
+
+                Object.keys(anime).forEach(season => {
+                    if (season !== "titulo" && season !== "descripcion" && season !== "portada") {
+                        const seasonDiv = document.createElement("div");
+                        seasonDiv.classList.add("season");
+                        seasonDiv.innerHTML = `<h3>${season}</h3>`;
+
+                        Object.keys(anime[season]).forEach(episode => {
+                            const episodeLink = anime[season][episode];
+                            const episodeButton = document.createElement("button");
+                            episodeButton.textContent = `Ver ${episode}`;
+                            episodeButton.onclick = () => window.location.href = episodeLink;
+
+                            seasonDiv.appendChild(episodeButton);
+                        });
+
+                        seasonsContainer.appendChild(seasonDiv);
+                    }
+                });
+            } else {
+                console.log("Anime no encontrado.");
+            }
+        }).catch(error => {
+            console.error("Error al cargar los datos del anime: ", error);
+        });
+    }
+
+    // Alternar el guardado del anime
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            const userId = user.uid;
+            const userAnimeRef = ref(database, `users/${userId}/savedAnimes/${animeId}`);
+
+            // Verificar si el anime ya está guardado
+            get(userAnimeRef).then(snapshot => {
+                if (snapshot.exists()) {
+                    saveButton.classList.add("saved");
+                }
+            });
+
+            saveButton.addEventListener("click", () => {
+                if (saveButton.classList.contains("saved")) {
+                    // Si está guardado, eliminarlo
+                    remove(userAnimeRef).then(() => {
+                        saveButton.classList.remove("saved");
+                        alert("Anime eliminado de favoritos.");
+                    }).catch(error => {
+                        console.error("Error al eliminar el anime: ", error);
+                        alert("Hubo un error al eliminar el anime.");
+                    });
+                } else {
+                    // Si no está guardado, agregarlo
+                    set(userAnimeRef, {
+                        id: animeId,
+                        timestamp: Date.now()
+                    }).then(() => {
+                        saveButton.classList.add("saved");
+                        alert("Anime guardado en favoritos.");
+                    }).catch(error => {
+                        console.error("Error al guardar el anime: ", error);
+                        alert("Hubo un error al guardar el anime.");
+                    });
+                }
+            });
+        } else {
+            saveButton.addEventListener("click", () => {
+                alert("Debes iniciar sesión para guardar animes.");
+            });
+        }
+    });
+</script>
+
+</body>
+
+</html>
