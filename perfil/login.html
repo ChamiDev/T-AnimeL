@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="TAL studios">
+    <meta name="description" content="Inicio de sesión con GitHub en T-AnimeL">
+    <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
+    <title>Login - T-AnimeL</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            font-family: 'MinecraftFont', sans-serif;
+            overflow: hidden;
+            transition: background 1s ease-in-out;
+        }
+
+        .login-container {
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 20px 40px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-container h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .login-container button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .login-container button:hover {
+            background-color: #218838;
+        }
+
+        .login-container img {
+            margin-bottom: 20px;
+            width: 100px;
+            height: 100px;
+        }
+
+        .user-info {
+            display: none;
+            margin-top: 20px;
+            color: white;
+        }
+
+        .user-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .user-info p {
+            display: inline-block;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <img src="https://chamidev.github.io/T-AnimeL/ico.png" alt="Logo">
+        <h1>Inicia sesión con GitHub</h1>
+        <button id="login-button">Iniciar sesión con GitHub</button>
+        <div id="user-info" class="user-info">
+            <img id="user-photo" src="" alt="Foto de perfil">
+            <p id="user-name">Nombre de usuario</p>
+            <button id="logout-button">Cerrar sesión</button>
+        </div>
+        <div id="account-options" class="user-info" style="display:none;">
+            <p>¿Quieres continuar con tu cuenta?</p>
+            <button id="continue-button">Continuar con esta cuenta</button>
+            <button id="switch-account-button">Iniciar sesión con otra cuenta</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase libraries
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getAuth, GithubAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
+            authDomain: "tanime-l.firebaseapp.com",
+            databaseURL: "https://tanime-l-default-rtdb.firebaseio.com",
+            projectId: "tanime-l",
+            storageBucket: "tanime-l.firebasestorage.app",
+            messagingSenderId: "636577160002",
+            appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // GitHub Authentication
+        const loginButton = document.getElementById("login-button");
+        const continueButton = document.getElementById("continue-button");
+        const switchAccountButton = document.getElementById("switch-account-button");
+        const logoutButton = document.getElementById("logout-button");
+
+        const provider = new GithubAuthProvider();
+
+        // Log in with GitHub
+        loginButton.addEventListener("click", () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    // The signed-in user info
+                    const user = result.user;
+
+                    // Display user info (name and profile picture)
+                    document.getElementById("user-photo").src = user.photoURL;
+                    document.getElementById("user-name").textContent = user.displayName;
+                    document.getElementById("user-info").style.display = 'block'; // Show user info
+
+                    // Hide login button and show account options
+                    document.getElementById("account-options").style.display = 'none';
+
+                    // Automatically redirect to the main page after login
+                    window.location.href = "https://chamidev.github.io/T-AnimeL/"; // Adjust the redirect URL if necessary
+                })
+                .catch((error) => {
+                    console.error("Error during GitHub login:", error);
+                });
+        });
+
+        // Check if user is authenticated
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Display user info if authenticated
+                document.getElementById("user-photo").src = user.photoURL;
+                document.getElementById("user-name").textContent = user.displayName;
+                document.getElementById("user-info").style.display = 'block'; // Show user info
+                document.getElementById("account-options").style.display = 'block'; // Show account options
+                document.getElementById("login-button").style.display = 'none'; // Hide login button
+            } else {
+                document.getElementById("login-button").style.display = 'block'; // Show login button
+                document.getElementById("account-options").style.display = 'none'; // Hide account options
+            }
+        });
+
+        // Continue with the current account
+        continueButton.addEventListener("click", () => {
+            window.location.href = "https://chamidev.github.io/T-AnimeL/"; // Redirect to the main page
+        });
+
+        // Switch account (sign out)
+        switchAccountButton.addEventListener("click", () => {
+            signOut(auth).then(() => {
+                console.log("User signed out.");
+                document.getElementById("user-info").style.display = 'none';
+                document.getElementById("login-button").style.display = 'block'; // Show login button
+            }).catch((error) => {
+                console.error("Error signing out:", error);
+            });
+        });
+
+        // Log out
+        logoutButton.addEventListener("click", () => {
+            signOut(auth).then(() => {
+                console.log("User signed out.");
+                document.getElementById("user-info").style.display = 'none';
+                document.getElementById("login-button").style.display = 'block'; // Show login button
+            }).catch((error) => {
+                console.error("Error signing out:", error);
+            });
+        });
+
+        // Change background based on the current time
+        const currentHour = new Date().getHours();
+        if (currentHour >= 6 && currentHour < 18) {
+            document.body.style.background = "linear-gradient(to right, #28a745, #03A9F4)";
+        } else {
+            document.body.style.background = "linear-gradient(to right, #28a745, #000000)";
+        }
+    </script>
+</body>
+
+  </html>
