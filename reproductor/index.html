@@ -28,13 +28,23 @@
         }
 
         #anime-container {
-            width: 100%;
-            height: 100%;
+            width: 95%;
+            max-width: 900px;
+            height: auto;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
             padding: 20px;
             color: white;
             text-align: center;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 16 / 9;
+            border: 10px;
+            background-color: black;
+            margin-bottom: 20px;
         }
 
         h1 {
@@ -50,15 +60,6 @@
         p {
             margin-bottom: 20px;
             font-size: 16px;
-        }
-
-        iframe {
-            width: 100%;
-            max-width: 1280px;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background-color: black;
-            margin-bottom: 20px;
         }
 
         .navigation-buttons {
@@ -88,6 +89,7 @@
 
 <body>
     <div id="anime-container">
+        <iframe id="video-frame" allow="autoplay"></iframe>
         <div id="anime-details">
             <!-- Aquí se cargarán los detalles del anime con JavaScript -->
         </div>
@@ -124,20 +126,20 @@
             get(animeRef).then(snapshot => {
                 if (snapshot.exists()) {
                     const anime = snapshot.val();
+                    const videoFrame = document.getElementById("video-frame");
                     const animeDetailsContainer = document.getElementById("anime-details");
 
                     const capituloUrl = anime[Object.keys(anime)[0]][capitulo]; // Obtener el enlace del capítulo
 
-                    // Mostrar detalles del capítulo y el iframe
                     if (capituloUrl && capituloUrl !== '#') {
+                        videoFrame.src = capituloUrl;
+
                         animeDetailsContainer.innerHTML = `
                             <h1>${anime.titulo}</h1>
                             <h2>${capitulo}</h2>
                             <p>${anime.descripcion}</p>
-                            <iframe src="${capituloUrl}" allow="autoplay"></iframe>
                         `;
 
-                        // Configurar botones de navegación
                         const chapterKeys = Object.keys(anime[Object.keys(anime)[0]]);
                         const currentIndex = chapterKeys.indexOf(capitulo);
 
