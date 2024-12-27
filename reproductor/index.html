@@ -99,69 +99,72 @@
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
+    // Obtener los parámetros de la URL
     const urlParams = new URLSearchParams(window.location.search);
-    const animeId = urlParams.get('id');
-    const chapter = urlParams.get('cap');
+    const param = urlParams.get('id');
+    if (!param || !param.includes('=')) {
+        console.error("Faltan parámetros o el formato es incorrecto.");
+        window.location.href = "index.html"; // Redirige si faltan parámetros
+    }
+
+    const [animeId, chapterIndex] = param.split('='); // Extraemos el ID del anime y el número del capítulo
+    const chapter = `capitulo ${chapterIndex}`;
 
     const videoFrame = document.getElementById("video-frame");
     const prevButton = document.getElementById("prev-button");
     const nextButton = document.getElementById("next-button");
 
-    if (!animeId || !chapter) {
-        console.error("Falta el ID del anime o el capítulo.");
-        window.location.href = "index.html"; // Redirige si faltan parámetros
-    } else {
-        const animeRef = ref(database, `Anime/${animeId}`);
-        get(animeRef).then(snapshot => {
-            if (snapshot.exists()) {
-                const animeData = snapshot.val();
-                const chapterKeys = [];
-                let currentIndex = -1;
+    const animeRef = ref(database, `Anime/${animeId}`);
+    get(animeRef).then(snapshot => {
+        if (snapshot.exists()) {
+            const animeData = snapshot.val();
+            const chapterKeys = [];
+            let currentIndex = -1;
 
-                // Obtener todas las claves de capítulos en orden
-                Object.keys(animeData).forEach(season => {
-                    if (season !== "titulo" && season !== "descripcion" && season !== "portada") {
-                        Object.keys(animeData[season]).forEach(chapterKey => {
-                            chapterKeys.push(chapterKey);
-                            if (chapterKey === chapter) {
-                                currentIndex = chapterKeys.length - 1;
-                            }
-                        });
-                    }
-                });
-
-                if (currentIndex !== -1) {
-                    // Mostrar el video del capítulo actual
-                    const videoLink = animeData[Object.keys(animeData).find(season => animeData[season][chapter])][chapter];
-                    videoFrame.src = videoLink;
-
-                    // Configurar botones
-                    prevButton.onclick = () => {
-                        if (currentIndex > 0) {
-                            const prevChapter = chapterKeys[currentIndex - 1];
-                            const encodedPrevChapter = encodeURIComponent(prevChapter); // Codificar URL
-                            window.location.href = `?id=${animeId}&cap=${encodedPrevChapter}`;
+            // Obtener todas las claves de capítulos en orden
+            Object.keys(animeData).forEach(season => {
+                if (season !== "titulo" && season !== "descripcion" && season !== "portada") {
+                    Object.keys(animeData[season]).forEach(chapterKey => {
+                        chapterKeys.push(chapterKey);
+                        if (chapterKey === chapter) {
+                            currentIndex = chapterKeys.length - 1;
                         }
-                    };
-
-                    nextButton.onclick = () => {
-                        if (currentIndex < chapterKeys.length - 1) {
-                            const nextChapter = chapterKeys[currentIndex + 1];
-                            const encodedNextChapter = encodeURIComponent(nextChapter); // Codificar URL
-                            window.location.href = `?id=${animeId}&cap=${encodedNextChapter}`;
-                        }
-                    };
-                } else {
-                    console.error("Capítulo no encontrado.");
+                    });
                 }
+            });
+
+            if (currentIndex !== -1) {
+                // Mostrar el video del capítulo actual
+                const videoLink = animeData[Object.keys(animeData).find(season => animeData[season][chapter])][chapter];
+                videoFrame.src = videoLink;
+
+                // Configurar botones
+                prevButton.onclick = () => {
+                    if (currentIndex > 0) {
+                        const prevChapter = chapterKeys[currentIndex - 1];
+                        const encodedPrevChapter = encodeURIComponent(prevChapter); // Codificar URL
+                        window.location.href = `?id=${animeId}=${chapterKeys.indexOf(prevChapter) + 1}`;
+                    }
+                };
+
+                nextButton.onclick = () => {
+                    if (currentIndex < chapterKeys.length - 1) {
+                        const nextChapter = chapterKeys[currentIndex + 1];
+                        const encodedNextChapter = encodeURIComponent(nextChapter); // Codificar URL
+                        window.location.href = `?id=${animeId}=${chapterKeys.indexOf(nextChapter) + 1}`;
+                    }
+                };
             } else {
-                console.error("Anime no encontrado.");
+                console.error("Capítulo no encontrado.");
             }
-        }).catch(error => {
-            console.error("Error al obtener los datos del anime: ", error);
-        });
-    }
+        } else {
+            console.error("Anime no encontrado.");
+        }
+    }).catch(error => {
+        console.error("Error al obtener los datos del anime: ", error);
+    });
 </script>
+
 
 </body>
 
