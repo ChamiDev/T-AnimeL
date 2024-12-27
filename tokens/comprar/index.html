@@ -1,1 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="TAL studios">
+    <meta name="description" content="Compra tokens para usar en T-AnimeL">
+    <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
+    <title>Comprar Tokens</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 100vh;
+            background: #004d00;
+            background-image: url('https://chamidev.github.io/T-AnimeL/fondo.png');
+            background-repeat: repeat;
+            background-size: 300px;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: column;
+            padding-top: 20px;
+            overflow: hidden;
+        }
+
+        #tokens-container {
+            width: 95%;
+            max-width: 600px;
+            height: auto;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+        }
+
+        h1 {
+            font-size: clamp(24px, 4vw, 32px);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .token-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 15px 20px;
+            border-radius: 5px;
+            text-align: left;
+            font-size: 18px;
+        }
+
+        .option p {
+            margin: 0;
+            color: white;
+        }
+
+        .option button {
+            width: 40px;
+            height: 40px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .option button:hover {
+            background-color: #218838;
+        }
+
+        .payment-info {
+            margin-top: 20px;
+            text-align: center;
+            background-color: #222;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        .payment-info h3 {
+            margin-bottom: 10px;
+        }
+
+        .payment-info p {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="tokens-container">
+    <h1>Compra Tokens</h1>
+    <div class="token-options">
+        <div class="option">
+            <p>1 Token - $10 ARS</p>
+            <button onclick="startPurchase(1, 10)">$</button>
+        </div>
+        <div class="option">
+            <p>10 Tokens - $100 ARS</p>
+            <button onclick="startPurchase(10, 100)">$</button>
+        </div>
+        <div class="option">
+            <p>100 Tokens - $1000 ARS</p>
+            <button onclick="startPurchase(100, 1000)">$</button>
+        </div>
+        <div class="option">
+            <p>1000 Tokens - $10,000 ARS</p>
+            <button onclick="startPurchase(1000, 10000)">$</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
+        authDomain: "tanime-l.firebaseapp.com",
+        projectId: "tanime-l",
+        storageBucket: "tanime-l.firebasestorage.app",
+        messagingSenderId: "636577160002",
+        appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    function startPurchase(tokens, price) {
+        const user = auth.currentUser;
+
+        if (!user) {
+            alert("Debes iniciar sesión para comprar tokens.");
+            return;
+        }
+
+        const userId = user.uid;
+        const purchaseRef = ref(database, `pendingPurchases/${userId}`);
+        const purchaseData = {
+            tokens,
+            price,
+            status: "pending",
+            timestamp: new Date().toISOString()
+        };
+
+        push(purchaseRef, purchaseData)
+            .then(() => {
+                alert(
+                    `Se ha registrado tu intención de compra de ${tokens} tokens por $${price} ARS. Realiza el pago usando el CBU: 0000003100042527237132. Una vez que verifiquemos el pago, recibirás tus tokens.`
+                );
+            })
+            .catch((error) => {
+                console.error("Error al registrar la compra: ", error);
+                alert("Hubo un error al procesar tu compra. Por favor, inténtalo de nuevo.");
+            });
+    }
+
+    window.startPurchase = startPurchase;
+</script>
+
+</body>
+
+</html>
