@@ -107,13 +107,16 @@
         window.location.href = "index.html"; // Redirige si faltan parámetros
     }
 
-    const [animeId, chapterIndex] = param.split('='); // Extraemos el ID del anime y el número del capítulo
-    const chapter = `capitulo ${chapterIndex}`;
+    const [animeId, seasonIndex, chapterIndex] = param.split('='); // Extraemos el ID del anime, la temporada y el capítulo
+
+    // Formato esperado para el capítulo
+    const chapterKey = `capitulo ${chapterIndex}`;
 
     const videoFrame = document.getElementById("video-frame");
     const prevButton = document.getElementById("prev-button");
     const nextButton = document.getElementById("next-button");
 
+    // Obtener la referencia al anime
     const animeRef = ref(database, `Anime/${animeId}`);
     get(animeRef).then(snapshot => {
         if (snapshot.exists()) {
@@ -121,16 +124,13 @@
             let currentSeason = null;
             let currentChapterLink = null;
 
-            // Buscar temporada y capítulo correspondiente
-            Object.keys(animeData).forEach(season => {
-                if (season !== "titulo" && season !== "descripcion" && season !== "portada") {
-                    // Buscar capítulo dentro de la temporada
-                    if (animeData[season][chapter]) {
-                        currentSeason = season;
-                        currentChapterLink = animeData[season][chapter];
-                    }
-                }
-            });
+            // Buscar la temporada correspondiente
+            const seasonKey = `Temporada ${seasonIndex}`; // Formato de temporada (por ejemplo, "Temporada 1")
+
+            if (animeData[seasonKey] && animeData[seasonKey][chapterKey]) {
+                currentSeason = seasonKey;
+                currentChapterLink = animeData[seasonKey][chapterKey];
+            }
 
             if (currentChapterLink) {
                 // Mostrar el video del capítulo actual
@@ -138,13 +138,13 @@
 
                 // Configurar botones
                 const chapterKeys = Object.keys(animeData[currentSeason]);
-                const currentIndex = chapterKeys.indexOf(chapter);
+                const currentIndex = chapterKeys.indexOf(chapterKey);
 
                 prevButton.onclick = () => {
                     if (currentIndex > 0) {
                         const prevChapter = chapterKeys[currentIndex - 1];
                         const encodedPrevChapter = encodeURIComponent(prevChapter); // Codificar URL
-                        window.location.href = `?id=${animeId}=${chapterKeys.indexOf(prevChapter) + 1}`;
+                        window.location.href = `?id=${animeId}=${seasonIndex}=${chapterKeys.indexOf(prevChapter) + 1}`;
                     }
                 };
 
@@ -152,7 +152,7 @@
                     if (currentIndex < chapterKeys.length - 1) {
                         const nextChapter = chapterKeys[currentIndex + 1];
                         const encodedNextChapter = encodeURIComponent(nextChapter); // Codificar URL
-                        window.location.href = `?id=${animeId}=${chapterKeys.indexOf(nextChapter) + 1}`;
+                        window.location.href = `?id=${animeId}=${seasonIndex}=${chapterKeys.indexOf(nextChapter) + 1}`;
                     }
                 };
             } else {
