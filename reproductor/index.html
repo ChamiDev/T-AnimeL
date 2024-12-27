@@ -17,32 +17,50 @@
 
         body {
             height: 100vh;
-            background: #004d00;
-            background-image: url('https://chamidev.github.io/T-AnimeL/fondo.png');
-            background-repeat: repeat;
-            background-size: 300px;
-            font-family: Arial, sans-serif;
+            background: #000;
+            color: white;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+        }
+
+        .video-container {
             position: relative;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         iframe {
-            top: 10px;
-            width: 90%;
+            width: 80%;
+            max-width: 1280px;
             aspect-ratio: 16 / 9;
-            border-radius: 10px;
+            border: none;
             background-color: black;
+            position: relative;
+        }
+
+        .logo-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            opacity: 0.6;
+            filter: grayscale(100%);
+            pointer-events: none; /* No afecta al clic del usuario */
+            max-width: 50px;
         }
 
         .navigation-buttons {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 10px;
         }
 
         .navigation-buttons button {
@@ -50,10 +68,9 @@
             color: white;
             border: none;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 24px;
             border-radius: 50%;
-            padding: 10px 15px;
-            margin: 10px 0;
+            padding: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -63,29 +80,30 @@
             background-color: #218838;
         }
 
-        .logo {
+        .prev-button {
             position: absolute;
-            top: 10px;
             left: 10px;
-            opacity: 0.6;
-            filter: grayscale(100%);
         }
 
-        .logo img {
-            max-width: 50px;
-            height: auto;
+        .next-button {
+            position: absolute;
+            right: 10px;
         }
     </style>
 </head>
 
 <body>
-    <div class="logo">
-        <img src="https://chamidev.github.io/T-AnimeL/ico.png" alt="Logo">
-    </div>
-    <iframe id="video-frame" allow="autoplay"></iframe>
-    <div class="navigation-buttons">
-        <button id="prev-button">&#x25C0;</button>
-        <button id="next-button">&#x25B6;</button>
+    <div class="video-container">
+        <iframe id="video-frame" allow="autoplay">
+            <!-- El logo dentro del iframe -->
+            <img src="https://chamidev.github.io/T-AnimeL/ico.png" class="logo-overlay" alt="Logo">
+        </iframe>
+
+        <!-- Botones de navegación -->
+        <div class="navigation-buttons">
+            <button id="prev-button" class="prev-button">&#x25C0;</button>
+            <button id="next-button" class="next-button">&#x25B6;</button>
+        </div>
     </div>
 
     <script type="module">
