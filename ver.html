@@ -274,7 +274,12 @@
                         seasonDiv.classList.add("season");
                         seasonDiv.innerHTML = `<h3>${season}</h3>`;
 
-                        Object.keys(anime[season]).forEach(episode => {
+                        // Obtener episodios y ordenarlos numéricamente
+                        const episodes = Object.keys(anime[season]).sort((a, b) => {
+                            return parseInt(a.replace("capitulo ", "")) - parseInt(b.replace("capitulo ", ""));
+                        });
+
+                        episodes.forEach(episode => {
                             const episodeLink = anime[season][episode];
                             const episodeButton = document.createElement("button");
                             episodeButton.textContent = `Ver ${episode}`;
