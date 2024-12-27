@@ -118,27 +118,28 @@
     get(animeRef).then(snapshot => {
         if (snapshot.exists()) {
             const animeData = snapshot.val();
-            const chapterKeys = [];
-            let currentIndex = -1;
+            let currentSeason = null;
+            let currentChapterLink = null;
 
-            // Obtener todas las claves de capítulos en orden
+            // Buscar temporada y capítulo correspondiente
             Object.keys(animeData).forEach(season => {
                 if (season !== "titulo" && season !== "descripcion" && season !== "portada") {
-                    Object.keys(animeData[season]).forEach(chapterKey => {
-                        chapterKeys.push(chapterKey);
-                        if (chapterKey === chapter) {
-                            currentIndex = chapterKeys.length - 1;
-                        }
-                    });
+                    // Buscar capítulo dentro de la temporada
+                    if (animeData[season][chapter]) {
+                        currentSeason = season;
+                        currentChapterLink = animeData[season][chapter];
+                    }
                 }
             });
 
-            if (currentIndex !== -1) {
+            if (currentChapterLink) {
                 // Mostrar el video del capítulo actual
-                const videoLink = animeData[Object.keys(animeData).find(season => animeData[season][chapter])][chapter];
-                videoFrame.src = videoLink;
+                videoFrame.src = currentChapterLink;
 
                 // Configurar botones
+                const chapterKeys = Object.keys(animeData[currentSeason]);
+                const currentIndex = chapterKeys.indexOf(chapter);
+
                 prevButton.onclick = () => {
                     if (currentIndex > 0) {
                         const prevChapter = chapterKeys[currentIndex - 1];
@@ -164,7 +165,6 @@
         console.error("Error al obtener los datos del anime: ", error);
     });
 </script>
-
 
 </body>
 
