@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="TAL studios">
-    <meta name="description" content="Aquí puedes ver las temporadas y capítulos de tu anime favorito">
+    <meta name="description" content="Reproductor de video para tus animes favoritos">
     <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
-    <title>Ver Anime</title>
+    <title>Reproductor</title>
     <style>
         * {
             box-sizing: border-box;
@@ -17,7 +17,6 @@
 
         body {
             height: 100vh;
-            background: #004d00;
             background-image: url('https://chamidev.github.io/T-AnimeL/fondo.png');
             background-repeat: repeat;
             background-size: 300px;
@@ -27,60 +26,65 @@
             align-items: center;
         }
 
-        .video-container {
-            position: relative;
+        #container {
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.9);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px 0;
+            position: relative;
         }
 
         iframe {
             width: 80%;
-            aspect-ratio: 16 / 9;
-            border-radius: 10px;
-            background-color: black;
+            height: 60%;
+            border: none;
         }
 
-        .navigation-button {
+        .logo {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 10px;
+            left: 10px;
+            opacity: 0.5;
+            filter: grayscale(1);
+            width: 80px;
+            height: auto;
+        }
+
+        .nav-buttons {
+            width: 80%;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            width: 15%;
+            padding: 10px;
             background-color: #28a745;
             color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 24px;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-size: 16px;
         }
 
-        .navigation-button:hover {
+        button:hover {
             background-color: #218838;
-        }
-
-        .prev-button {
-            left: 10px;
-        }
-
-        .next-button {
-            right: 10px;
         }
     </style>
 </head>
 
 <body>
-    <div class="video-container">
-        <iframe id="video-frame" allow="autoplay"></iframe>
-        <button class="navigation-button prev-button" id="prev-button">&#x25C0;</button>
-        <button class="navigation-button next-button" id="next-button">&#x25B6;</button>
+    <div id="container">
+        <img src="https://chamidev.github.io/T-AnimeL/ico.png" alt="Logo" class="logo">
+        <iframe id="video-frame" src="" allowfullscreen></iframe>
+        <div class="nav-buttons">
+            <button id="prev-button">⏪ Anterior</button>
+            <button id="next-button">Siguiente ⏩</button>
+        </div>
     </div>
 
     <script type="module">
@@ -101,50 +105,64 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const animeId = urlParams.get('id');
-        const capitulo = urlParams.get('cap');
+        const chapter = urlParams.get('cap');
 
-        if (!animeId || !capitulo) {
-            window.location.href = "index.html";
+        const videoFrame = document.getElementById("video-frame");
+        const prevButton = document.getElementById("prev-button");
+        const nextButton = document.getElementById("next-button");
+
+        if (!animeId || !chapter) {
+            console.error("Falta el ID del anime o el capítulo.");
+            window.location.href = "index.html"; // Redirige si faltan parámetros
         } else {
-            const animeRef = ref(database, 'Anime/' + animeId);
+            const animeRef = ref(database, `Anime/${animeId}`);
             get(animeRef).then(snapshot => {
                 if (snapshot.exists()) {
-                    const anime = snapshot.val();
-                    const videoFrame = document.getElementById("video-frame");
+                    const animeData = snapshot.val();
+                    const chapterKeys = [];
+                    let currentIndex = -1;
 
-                    const capituloUrl = anime[Object.keys(anime)[0]][capitulo]; // Obtener el enlace del capítulo
+                    // Obtener todas las claves de capítulos en orden
+                    Object.keys(animeData).forEach(season => {
+                        if (season !== "titulo" && season !== "descripcion" && season !== "portada") {
+                            Object.keys(animeData[season]).forEach(chapterKey => {
+                                chapterKeys.push(chapterKey);
+                                if (chapterKey === chapter) {
+                                    currentIndex = chapterKeys.length - 1;
+                                }
+                            });
+                        }
+                    });
 
-                    if (capituloUrl && capituloUrl !== '#') {
-                        videoFrame.src = capituloUrl;
+                    if (currentIndex !== -1) {
+                        // Mostrar el video del capítulo actual
+                        const videoLink = animeData[Object.keys(animeData).find(season => animeData[season][chapter])][chapter];
+                        videoFrame.src = videoLink;
 
-                        const chapterKeys = Object.keys(anime[Object.keys(anime)[0]]);
-                        const currentIndex = chapterKeys.indexOf(capitulo);
-
-                        const prevButton = document.getElementById('prev-button');
-                        const nextButton = document.getElementById('next-button');
-
+                        // Configurar botones
                         prevButton.onclick = () => {
                             if (currentIndex > 0) {
                                 const prevChapter = chapterKeys[currentIndex - 1];
-                                window.location.href = `?id=${animeId}&cap=${prevChapter}`;
+                                const encodedPrevChapter = encodeURIComponent(prevChapter); // Codificar URL
+                                window.location.href = `?id=${animeId}&cap=${encodedPrevChapter}`;
                             }
                         };
 
                         nextButton.onclick = () => {
                             if (currentIndex < chapterKeys.length - 1) {
                                 const nextChapter = chapterKeys[currentIndex + 1];
-                                window.location.href = `?id=${animeId}&cap=${nextChapter}`;
+                                const encodedNextChapter = encodeURIComponent(nextChapter); // Codificar URL
+                                window.location.href = `?id=${animeId}&cap=${encodedNextChapter}`;
                             }
                         };
                     } else {
-                        videoFrame.src = "about:blank";
-                        alert("Este capítulo no está disponible.");
+                        console.error("Capítulo no encontrado.");
                     }
                 } else {
-                    console.log("Anime no encontrado.");
+                    console.error("Anime no encontrado.");
                 }
             }).catch(error => {
-                console.error("Error al cargar los datos del anime: ", error);
+                console.error("Error al obtener los datos del anime: ", error);
             });
         }
     </script>
