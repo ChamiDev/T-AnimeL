@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="TAL studios">
-    <meta name="description" content="Reproductor de Anime">
+    <meta name="description" content="Aquí puedes ver las temporadas y capítulos de tu anime favorito">
     <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
-    <title>Reproductor de Anime</title>
+    <title>Ver Anime</title>
     <style>
         * {
             box-sizing: border-box;
@@ -26,130 +26,148 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            flex-direction: column;
-            color: white;
         }
 
-        #reproductor-container {
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            padding: 20px;
+        #video-container {
+            width: 95%;
+            max-width: 1200px;
+            height: 90%;
+            background-color: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
-            text-align: center;
+            padding: 20px;
+            color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-y: auto;
         }
 
-        h1, h2 {
-            margin: 10px 0;
+        h1, h2, h3 {
             font-size: clamp(20px, 3vw, 24px);
+            margin: 10px 0;
         }
 
-        #video {
+        iframe {
             width: 100%;
-            max-width: 800px;
-            height: 450px;
-            background-color: black;
-            margin: 20px 0;
+            height: 500px;
             border-radius: 10px;
         }
 
-        button {
-            padding: 10px 20px;
-            margin: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
+        .nav {
+            width: 94%;
+            height: 45px;
+            background-color: green;
+            position: absolute;
+            top: 3px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
         }
 
-        button:hover {
-            background-color: #218838;
+        .navimg {
+            height: 30px;
+            background-color: white;
+            box-shadow: 0px 0px 5px 5px white;
+            border-radius: 50%;
         }
+
+        .cuenta {
+            position: relative;
+        }
+
+        .cuenta .menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 35px;
+            background-color: #333;
+            border-radius: 5px;
+            width: 150px;
+            z-index: 1;
+        }
+
+        .cuenta:hover .menu {
+            display: block;
+        }
+
+        .cuenta .menu a {
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            border-bottom: 1px solid #444;
+        }
+
+        .cuenta .menu a:hover {
+            background-color: #555;
+        }
+
     </style>
 </head>
 
 <body>
-    <div id="reproductor-container">
-        <h1 id="anime-title">Cargando anime...</h1>
-        <h2 id="episode-title">Cargando capítulo...</h2>
-        <video id="video" controls>
-            <source id="video-source" src="" type="video/mp4">
-            Tu navegador no soporta el elemento de video.
-        </video>
-        <button id="previous-btn">Anterior</button>
-        <button id="next-btn">Siguiente</button>
+
+<div id="video-container">
+    <div id="video-details">
+        <!-- Aquí se cargará el video con JavaScript -->
+        <h1 id="anime-title">Cargando...</h1>
+        <iframe id="video-player" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
+</div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
-            authDomain: "tanime-l.firebaseapp.com",
-            projectId: "tanime-l",
-            storageBucket: "tanime-l.firebasestorage.app",
-            messagingSenderId: "636577160002",
-            appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMeTcxPD3bguQPex1IttJhGlZj0J4IW50",
+        authDomain: "tanime-l.firebaseapp.com",
+        projectId: "tanime-l",
+        storageBucket: "tanime-l.firebasestorage.app",
+        messagingSenderId: "636577160002",
+        appId: "1:636577160002:web:8f4eccf5e645311eefc6db"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
 
-        // Obtener parámetros de la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const animeId = urlParams.get('id');
-        const episodeId = parseInt(urlParams.get('cap'), 10);
+    const urlParams = new URLSearchParams(window.location.search);
+    const animeId = urlParams.get('id');
+    const episodeId = urlParams.get('cap');
 
-        if (!animeId || !episodeId) {
-            alert("ID de anime o capítulo no válido.");
-            return;
-        }
-
-        // Obtener los datos del anime desde Firebase
+    if (!animeId || !episodeId) {
+        window.location.href = "index.html";
+    } else {
         const animeRef = ref(database, 'Anime/' + animeId);
         get(animeRef).then(snapshot => {
             if (snapshot.exists()) {
                 const anime = snapshot.val();
+                const animeDetailsContainer = document.getElementById("video-details");
+                const videoPlayer = document.getElementById("video-player");
                 const animeTitle = document.getElementById("anime-title");
-                const episodeTitle = document.getElementById("episode-title");
-                const videoSource = document.getElementById("video-source");
-                const video = document.getElementById("video");
 
-                // Cargar el título del anime y el capítulo
+                // Set the anime title
                 animeTitle.textContent = anime.titulo;
-                episodeTitle.textContent = `Capítulo ${episodeId}: ${anime[`capitulo_${episodeId}`].titulo}`;
-                videoSource.src = anime[`capitulo_${episodeId}`].videoUrl;
-                video.load(); // Recargar el video
 
-                // Botones de navegación
-                const previousBtn = document.getElementById("previous-btn");
-                const nextBtn = document.getElementById("next-btn");
+                // Get the video URL for the specific episode
+                const episodeLink = anime[episodeId] && anime[episodeId].videoURL;
 
-                // Navegar al capítulo anterior
-                previousBtn.addEventListener("click", () => {
-                    if (episodeId > 1) {
-                        window.location.href = `reproductor/?id=${animeId}&cap=${episodeId - 1}`;
-                    }
-                });
-
-                // Navegar al siguiente capítulo
-                nextBtn.addEventListener("click", () => {
-                    if (anime[`capitulo_${episodeId + 1}`]) {
-                        window.location.href = `reproductor/?id=${animeId}&cap=${episodeId + 1}`;
-                    }
-                });
+                if (episodeLink) {
+                    videoPlayer.src = episodeLink;  // Set the video URL in the iframe
+                } else {
+                    animeDetailsContainer.innerHTML = "<h1>Capítulo no disponible.</h1>";
+                }
             } else {
-                alert("Anime no encontrado.");
+                console.log("Anime no encontrado.");
             }
         }).catch(error => {
-            console.error("Error al cargar los datos del anime:", error);
+            console.error("Error al cargar los datos del anime: ", error);
         });
-    </script>
+    }
+</script>
 
 </body>
 
