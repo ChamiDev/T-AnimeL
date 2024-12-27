@@ -206,6 +206,12 @@
     *::-webkit-scrollbar-thumb:hover {
         background-color: #62A34B;
     }
+
+    .disabled-link {
+       background-color: red;
+       cursor: not-allowed;
+    }
+
 </style>
 </head>
 
@@ -272,7 +278,13 @@
                             const episodeLink = anime[season][episode];
                             const episodeButton = document.createElement("button");
                             episodeButton.textContent = `Ver ${episode}`;
-                            episodeButton.onclick = () => window.location.href = episodeLink;
+
+                            // Si el enlace es "#", asignar clase para estilizar en rojo
+                            if (episodeLink === "#") {
+                                episodeButton.classList.add("disabled-link");
+                            } else {
+                                episodeButton.onclick = () => window.location.href = episodeLink;
+                            }
 
                             seasonDiv.appendChild(episodeButton);
                         });
@@ -332,7 +344,6 @@
         }
     });
 </script>
-
 </body>
 
 </html>
