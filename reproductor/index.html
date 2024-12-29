@@ -110,7 +110,7 @@
     const [animeId, seasonIndex, chapterIndex] = param.split('='); // Extraemos el ID del anime, la temporada y el capítulo
 
     // Formato esperado para el capítulo
-    const chapterKey = `capitulo ${chapterIndex}`;
+    const chapterKey = `${chapterIndex}`;
 
     const videoFrame = document.getElementById("video-frame");
     const prevButton = document.getElementById("prev-button");
@@ -125,7 +125,7 @@
             let currentChapterLink = null;
 
             // Buscar la temporada correspondiente
-            const seasonKey = `Temporada ${seasonIndex}`; // Formato de temporada (por ejemplo, "Temporada 1")
+            const seasonKey = `${seasonIndex}`; // Usamos el número de temporada como clave
 
             if (animeData[seasonKey] && animeData[seasonKey][chapterKey]) {
                 currentSeason = seasonKey;
