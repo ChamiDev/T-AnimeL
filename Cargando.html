@@ -23,6 +23,7 @@
       background-color: #000;
       overflow: hidden;
       user-select: none;
+      cursor: pointer; /* Cambia el cursor para indicar que se puede hacer clic */
     }
 
     video {
@@ -33,6 +34,7 @@
       height: 100%;
       object-fit: cover;
       display: none;
+      z-index: 1; /* Asegura que el video esté por debajo del texto */
     }
 
     #progress-container {
@@ -43,6 +45,7 @@
       background-color: rgba(255, 0, 0, 0.1);
       border-radius: 5px;
       overflow: hidden;
+      z-index: 2;
     }
 
     #progress-bar {
@@ -60,6 +63,19 @@
       font-size: 1.2rem;
       color: #fff;
       font-family: Arial, sans-serif;
+      z-index: 2;
+    }
+
+    #skip-text {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 1.5rem;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: none; /* Inicialmente oculto */
+      z-index: 3; /* Asegura que el texto esté encima del video */
     }
   </style>
 </head>
@@ -70,6 +86,8 @@
     <div id="progress-bar"></div>
   </div>
 
+  <span id="skip-text">Toca para saltar intro</span>
+
   <video id="video" muted preload="auto">
     <source src="https://um2412.renderforest.com/u25148551/visuals/cd40896d-e837-4fc1-8435-188db1c7b048.mp4" type="video/mp4">
     Tu dispositivo no es compatible...
@@ -79,6 +97,8 @@
     const video = document.getElementById('video');
     const progressBar = document.getElementById('progress-bar');
     const percentageText = document.getElementById('percentage');
+    const skipText = document.getElementById('skip-text');
+    let clickedOnce = false;
 
     function updateProgress() {
       if (video.buffered.length > 0) {
@@ -108,6 +128,18 @@
         }
       }
     }, 200);
+
+    // Detecta el clic en el área del video
+    document.body.addEventListener('click', () => {
+      if (!clickedOnce) {
+        clickedOnce = true;
+        skipText.style.display = 'block'; // Muestra el texto
+      } else {
+        // Si ya se ha hecho clic, salta el video y redirige
+        video.pause();
+        window.location.href = 'https://chamidev.github.io/T-AnimeL/';
+      }
+    });
 
     // Redirige a la página cuando el video termina
     video.addEventListener('ended', () => {
