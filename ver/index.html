@@ -215,13 +215,17 @@
             cursor: not-allowed;
         }
 
-        /* Estilos para el ribbon */
+        .ribbon-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
 
         .ribbon {
             width: 150px;
-            position: absolute;
-            left: 50%;
-            margin-left: -75px;
+            position: relative;
+            margin: 5px;
             text-align: center;
             font-size: 32px !important;
             background: #0DC200;
@@ -337,25 +341,32 @@
                     const anime = snapshot.val();
                     const animeDetailsContainer = document.getElementById("anime-details");
 
-                    // Insertar Ribbon con las categorías
-                    if (anime.categoria) {
-                        animeDetailsContainer.insertAdjacentHTML('afterbegin', `
-                            <div class="ribbon">
-                                <div class="ribbon-stitches-top"></div>
-                                <div class="ribbon-content"><p><b>${anime.categoria}</b></p></div>
-                                <div class="ribbon-stitches-bottom"></div>
-                            </div>
-                        `);
-                    }
-
                     // Detalles del anime
-                    animeDetailsContainer.innerHTML += `
+                    animeDetailsContainer.innerHTML = `
                         <h1>${anime.titulo}</h1>
                         <img src="${anime.portada}" alt="${anime.titulo}">
+                        <div class="ribbon-container" id="ribbon-container"></div>
                         <p>${anime.descripcion}</p>
                         <h2>Temporadas</h2>
                         <div id="seasons"></div>
                     `;
+
+                    // Generar ribbons para las categorías
+                    if (anime.categoria) {
+                        const ribbonContainer = document.getElementById("ribbon-container");
+                        const categorias = anime.categoria.split(',').map(cat => cat.trim());
+
+                        categorias.forEach(categoria => {
+                            const ribbonHTML = `
+                                <div class="ribbon">
+                                    <div class="ribbon-stitches-top"></div>
+                                    <div class="ribbon-content"><p>${categoria}</p></div>
+                                    <div class="ribbon-stitches-bottom"></div>
+                                </div>
+                            `;
+                            ribbonContainer.insertAdjacentHTML('beforeend', ribbonHTML);
+                        });
+                    }
 
                     // Generar temporadas y capítulos
                     const seasonsContainer = document.getElementById("seasons");
