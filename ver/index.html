@@ -288,7 +288,12 @@
                             if (episodeLink === "#") {
                                 episodeButton.classList.add("disabled-link");
                             } else {
-                                episodeButton.onclick = () => window.location.href = episodeLink;
+                                episodeButton.onclick = () => {
+                                    const seasonNumber = season.replace("Temporada ", ""); // Extrae el número de temporada
+                                    const episodeNumber = episode.replace("capitulo ", ""); // Extrae el número de capítulo
+                                    const redirectUrl = `https://chamidev.github.io/T-AnimeL/reproductor/?id=${animeId}=${seasonNumber}=${episodeNumber}`;
+                                    window.location.href = redirectUrl;
+                                };
                             }
 
                             seasonDiv.appendChild(episodeButton);
