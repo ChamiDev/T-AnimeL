@@ -223,7 +223,7 @@
         }
 
         .ribbon {
-            width: 150px;
+            width: auto;
             position: relative;
             margin: 5px;
             text-align: center;
@@ -242,16 +242,6 @@
             padding: 2px 10px;
         }
 
-        .ribbon:before,
-        .ribbon:after {
-            content: '';
-            position: absolute;
-            display: block;
-            bottom: -1em;
-            border: 1.5em solid #0DC200;
-            z-index: -1;
-        }
-
         .ribbon:before {
             left: -2em;
             border-right-width: 1.5em;
@@ -264,16 +254,6 @@
             border-left-width: 1.5em;
             border-right-color: transparent;
             box-shadow: rgba(0, 0, 0, 0.4) -1px 1px 1px;
-        }
-
-        .ribbon .ribbon-content:before,
-        .ribbon .ribbon-content:after {
-            border-color: #008700 transparent transparent transparent;
-            position: absolute;
-            display: block;
-            border-style: solid;
-            bottom: -1em;
-            content: '';
         }
 
         .ribbon .ribbon-content:before {
