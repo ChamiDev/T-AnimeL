@@ -310,7 +310,7 @@
         const saveButton = document.getElementById("save-anime");
 
         if (!animeId) {
-            window.location.href = "index.html";
+            window.location.href = "https://chamidev.github.io/T-AnimeL/";
         } else {
             const animeRef = ref(database, 'Anime/' + animeId);
             get(animeRef).then(snapshot => {
