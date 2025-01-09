@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="TAL studios">
-    <meta name="description" content="Aquí puedes ver las temporadas y capítulos de tu anime favorito">
+    <meta name="description" content="Aquí puedes ver las películas de tu anime favorito">
     <link rel="icon" href="https://chamidev.github.io/T-AnimeL/ico.png" type="image/png">
-    <title>Ver Anime</title>
+    <title>Ver Películas</title>
     <style>
         /* Estilos base */
 
@@ -273,7 +273,7 @@
             margin-bottom: 2px;
             border-top: 1px dashed rgba(0, 0, 0, 0.2);
             box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
-        }
+        } 
     </style>
 </head>
 
@@ -323,8 +323,8 @@
                         <h1>${anime.titulo}</h1>
                         <div class="ribbon-container" id="ribbon-container"></div>
                         <p>${anime.descripcion}</p>
-                        <h2>Temporadas</h2>
-                        <div id="seasons"></div>
+                        <h2>Películas</h2>
+                        <div id="movies"></div>
                     `;
 
                     // Generar ribbons para las categorías
@@ -344,39 +344,24 @@
                         });
                     }
 
-                    // Generar temporadas y capítulos
-                    const seasonsContainer = document.getElementById("seasons");
+                    // Generar botones para las películas
+                    const moviesContainer = document.getElementById("movies");
 
-                    Object.keys(anime).forEach(season => {
-                        if (season !== "titulo" && season !== "descripcion" && season !== "portada" && season !== "categoria") {
-                            const seasonDiv = document.createElement("div");
-                            seasonDiv.classList.add("season");
-                            seasonDiv.innerHTML = `<h3>${season}</h3>`;
+                    Object.keys(anime).forEach(key => {
+                        if (key.startsWith("pelicula")) { // Asegurarse de que las claves sean "pelicula1", "pelicula2", etc.
+                            const movieDetails = anime[key];
+                            const movieButton = document.createElement("button");
 
-                            const episodes = Object.keys(anime[season]).sort((a, b) => {
-                                return parseInt(a.replace("capitulo ", "")) - parseInt(b.replace("capitulo ", ""));
-                            });
+                            movieButton.textContent = movieDetails.nombre || `Película ${key.replace("pelicula", "")}`;
+                            if (movieDetails.link && movieDetails.link !== "#") {
+                                movieButton.onclick = () => {
+                                    window.location.href = movieDetails.link;
+                                };
+                            } else {
+                                movieButton.classList.add("disabled-link");
+                            }
 
-                            episodes.forEach(episode => {
-                                const episodeLink = anime[season][episode];
-                                const episodeButton = document.createElement("button");
-                                episodeButton.textContent = `Capitulo ${episode}`;
-
-                                if (episodeLink === "#") {
-                                    episodeButton.classList.add("disabled-link");
-                                } else {
-                                    episodeButton.onclick = () => {
-                                        const seasonNumber = season.replace("Temporada ", "");
-                                        const episodeNumber = episode.replace("capitulo ", "");
-                                        const redirectUrl = `https://chamidev.github.io/T-AnimeL/reproductor/?id=${animeId}=${seasonNumber}=${episodeNumber}`;
-                                        window.location.href = redirectUrl;
-                                    };
-                                }
-
-                                seasonDiv.appendChild(episodeButton);
-                            });
-
-                            seasonsContainer.appendChild(seasonDiv);
+                            moviesContainer.appendChild(movieButton);
                         }
                     });
                 } else {
